@@ -1,17 +1,17 @@
 import type { Metadata } from "next";
-import HomePageClient from "./_components/home-page-client";
+import HomeConversionPage from "./_components/home-conversion-page";
 
 export const metadata: Metadata = {
-  title: "Managed IT, Security, and Infrastructure",
+  title: "Friendly Managed IT Support for Small Businesses",
   description:
-    "GlobalTech delivers managed IT, business phone systems, network infrastructure, cybersecurity, and low-voltage deployments with enterprise execution and clear accountability.",
+    "Lone Star GlobalTech provides approachable managed IT support, security-aware services, networks, phones, and infrastructure for small and medium businesses.",
   alternates: {
     canonical: "/",
   },
   openGraph: {
-    title: "GlobalTech | Managed IT, Security, and Infrastructure",
+    title: "GlobalTech | Friendly Managed IT Support",
     description:
-      "Enterprise-grade managed IT and infrastructure delivery for small and mid-sized teams.",
+      "Managed IT support, security-aware services, and infrastructure help from a local team that feels easy to work with.",
     url: "/",
     type: "website",
     siteName: "GlobalTech",
@@ -26,13 +26,13 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "GlobalTech | Managed IT, Security, and Infrastructure",
+    title: "GlobalTech | Friendly Managed IT Support",
     description:
-      "Managed IT, VoIP, security, and infrastructure delivery with enterprise execution and clear accountability.",
+      "Friendly managed IT, security-aware support, VoIP, and infrastructure services for small and medium businesses.",
     images: ["/opengraph-image?v=3"],
   },
 };
 
 export default function Page() {
-  return <HomePageClient />;
+  return <HomeConversionPage />;
 }

@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { CtaLink, SiteContainer } from "@/src/components/site/ui-system";
+import { CTA, SITE } from "@/src/lib/site-config";
 
 type NavItem = {
   label: string;
@@ -10,10 +11,10 @@ type NavItem = {
 
 const DEFAULT_NAV: NavItem[] = [
   { label: "Home", href: "/" },
-  { label: "Solutions", href: "/#solutions" },
-  { label: "Projects", href: "/#projects" },
-  { label: "How We Work", href: "/#process" },
-  { label: "MSP Plans", href: "/msp" },
+  { label: "Managed IT", href: "/msp" },
+  { label: "Services", href: "/#services" },
+  { label: "Why Us", href: "/#why-us" },
+  { label: "Providers", href: "/careers" },
 ];
 
 export function BrandBackdrop() {
@@ -27,7 +28,7 @@ export function BrandBackdrop() {
 }
 
 export function BrandHeader({
-  subtitle = "DBA of Lone Star GlobalTech",
+  subtitle = "Friendly IT support for growing teams",
   nav = DEFAULT_NAV,
 }: {
   subtitle?: string;
@@ -43,7 +44,7 @@ export function BrandHeader({
                 <Image src="/isotipo.png" alt="GlobalTech logo" fill className="object-contain p-1" sizes="40px" priority />
               </div>
               <div className="leading-tight">
-                <div className="font-semibold tracking-tight">GlobalTech</div>
+                <div className="font-semibold tracking-tight">{SITE.brand}</div>
                 <div className="text-xs text-white/55">{subtitle}</div>
               </div>
             </Link>
@@ -61,13 +62,13 @@ export function BrandHeader({
             </nav>
 
             <div className="flex items-center gap-2">
-              <CtaLink href="/#contact" variant="primary" className="px-4 py-2 text-xs md:text-sm lg:px-6 lg:py-2.5 lg:text-sm">
-                Schedule a FREE Assessment
+              <CtaLink href="/msp#quick-plan" variant="primary" className="px-4 py-2 text-xs md:text-sm lg:px-6 lg:py-2.5 lg:text-sm">
+                {CTA.quickPlan}
               </CtaLink>
-              <CtaLink href="tel:8064849040" variant="ghost" className="px-3 py-2 text-xs md:text-sm lg:px-4 lg:py-2.5">
+              <CtaLink href={SITE.phoneHref} variant="ghost" className="px-3 py-2 text-xs md:text-sm lg:px-4 lg:py-2.5">
                 Call
               </CtaLink>
-              <CtaLink href="mailto:info@lonestarglobaltech.com" variant="ghost" className="px-3 py-2 text-xs md:text-sm lg:px-4 lg:py-2.5">
+              <CtaLink href={SITE.emailHref} variant="ghost" className="px-3 py-2 text-xs md:text-sm lg:px-4 lg:py-2.5">
                 Email
               </CtaLink>
             </div>
@@ -85,8 +86,8 @@ export function BrandFooter() {
         <div className="rounded-2xl border border-white/10 bg-white/5 px-4 py-5 text-sm text-white/65 backdrop-blur">
           <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
             <div>
-              <p>© {new Date().getFullYear()} GlobalTech (DBA of Lone Star GlobalTech)</p>
-              <p className="mt-1 text-xs text-white/45">Texas Private Security License: B30867701</p>
+              <p>© {new Date().getFullYear()} {SITE.brand} (DBA of {SITE.legalName})</p>
+              <p className="mt-1 text-xs text-white/45">Texas Private Security License: {SITE.dpsLicense}</p>
             </div>
 
             <div className="flex flex-col gap-3 md:items-end">
@@ -95,7 +96,10 @@ export function BrandFooter() {
                   Home
                 </Link>
                 <Link href="/msp" className="hover:text-white">
-                  MSP Plans
+                  Managed IT
+                </Link>
+                <Link href="/careers" className="hover:text-white">
+                  Providers
                 </Link>
                 <Link href="/privacy-policy" className="hover:text-white">
                   Privacy Policy

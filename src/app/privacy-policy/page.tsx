@@ -14,9 +14,10 @@ export default function PrivacyPolicyPage() {
           subtitle="Privacy, Compliance, and Security"
           nav={[
             { label: "Home", href: "/" },
-            { label: "Solutions", href: "/#solutions" },
-            { label: "Projects", href: "/#projects" },
-            { label: "MSP Plans", href: "/msp" },
+            { label: "Services", href: "/#services" },
+            { label: "Why Us", href: "/#why-us" },
+            { label: "Managed IT", href: "/msp" },
+            { label: "Providers", href: "/careers" },
             { label: "Privacy", href: "/privacy-policy", active: true },
           ]}
         />

@@ -31,8 +31,8 @@ export default async function ThankYouPage({ searchParams }: ThankYouProps) {
   const secondaryLink = isSupport
     ? { href: "/#contact", label: "Open Another Ticket" }
     : isProject
-    ? { href: "/#projects", label: "View Delivered Projects" }
-    : { href: "/msp", label: "Compare MSP Plans" };
+    ? { href: "/#services", label: "View Services" }
+    : { href: "/msp", label: "Review Managed IT Services" };
 
   const nextSteps = isSupport
     ? [

@@ -1,16 +1,17 @@
 import { NextResponse } from "next/server";
 import { headers } from "next/headers";
-import nodemailer from "nodemailer";
+import { assertEmailReady, createMailer } from "@/src/lib/email";
 
 export const runtime = "nodejs";
 
 type TicketBody = {
-  type?: "support" | "project" | "msp";
+  type?: "support" | "project" | "msp" | "provider";
   name?: string;
   email?: string;
   phone?: string;
   company?: string;
   message?: string;
+  leadSource?: string;
   website?: string; // honeypot
   turnstileToken?: string; // optional (future)
 };
@@ -71,6 +72,36 @@ function isEmail(s: string) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(s);
 }
 
+function isAllowedResume(file: File) {
+  const allowedTypes = new Set([
+    "application/pdf",
+    "application/msword",
+    "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+  ]);
+  const allowedExt = /\.(pdf|doc|docx)$/i.test(file.name);
+  return allowedTypes.has(file.type) || allowedExt;
+}
+
+async function parseBody(req: Request) {
+  const contentType = req.headers.get("content-type") || "";
+  if (contentType.includes("multipart/form-data")) {
+    const fd = await req.formData();
+    const body: TicketBody = {
+      type: clean(fd.get("type"), 40) as TicketBody["type"],
+      name: clean(fd.get("name"), 120),
+      email: clean(fd.get("email"), 180),
+      phone: clean(fd.get("phone"), 80),
+      company: clean(fd.get("company"), 140),
+      message: clean(fd.get("message"), 4000),
+      website: clean(fd.get("website"), 200),
+    };
+    return { body, formData: fd };
+  }
+
+  const body = (await req.json()) as TicketBody;
+  return { body, formData: null };
+}
+
 export async function POST(req: Request) {
   const ip = await getClientIp();
 
@@ -86,10 +117,13 @@ export async function POST(req: Request) {
   }
 
   let body: TicketBody;
+  let formData: FormData | null;
   try {
-    body = (await req.json()) as TicketBody;
+    const parsed = await parseBody(req);
+    body = parsed.body;
+    formData = parsed.formData;
   } catch {
-    return NextResponse.json({ error: "Invalid JSON" }, { status: 400 });
+    return NextResponse.json({ error: "Invalid request body" }, { status: 400 });
   }
 
   // Honeypot: bots fill this
@@ -101,13 +135,16 @@ export async function POST(req: Request) {
     ? "msp"
     : body.type === "project"
     ? "project"
-    : "support") as "support" | "project" | "msp";
+    : body.type === "provider"
+    ? "provider"
+    : "support") as "support" | "project" | "msp" | "provider";
 
   const name = clean(body.name, 120);
   const email = clean(body.email, 180);
   const phone = clean(body.phone, 80);
   const company = clean(body.company, 140);
   const message = clean(body.message, 4000);
+  const leadSource = clean(body.leadSource, 120);
 
   if (!name || !email || !message) {
     return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
@@ -116,33 +153,71 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Invalid email" }, { status: 400 });
   }
 
+  let attachment:
+    | {
+        filename: string;
+        content: Buffer;
+        contentType?: string;
+      }
+    | undefined;
+
+  if (type === "provider") {
+    const requiredProviderFields = [
+      "cityState",
+      "availability",
+      "experienceLevel",
+      "areasExperience",
+      "transportation",
+      "tools",
+    ];
+    const missingProviderField = requiredProviderFields.find((field) => !clean(formData?.get(field), 1200));
+    if (!phone || missingProviderField) {
+      return NextResponse.json({ error: "Missing required provider application fields" }, { status: 400 });
+    }
+
+    const resume = formData?.get("resume");
+    if (!(resume instanceof File) || resume.size === 0) {
+      return NextResponse.json({ error: "Resume upload is required" }, { status: 400 });
+    }
+    if (resume.size > 5 * 1024 * 1024) {
+      return NextResponse.json({ error: "Resume must be 5 MB or smaller" }, { status: 400 });
+    }
+    if (!isAllowedResume(resume)) {
+      return NextResponse.json({ error: "Resume must be a PDF, DOC, or DOCX file" }, { status: 400 });
+    }
+
+    attachment = {
+      filename: resume.name || "resume",
+      content: Buffer.from(await resume.arrayBuffer()),
+      contentType: resume.type || undefined,
+    };
+  }
+
   const supportTo = process.env.SUPPORT_TO;
   const salesTo = process.env.SALES_TO;
+  const providerTo = process.env.PROVIDER_TO || process.env.CAREERS_TO;
   const legacyTo = process.env.TICKETS_TO;
-  const from = process.env.TICKETS_FROM;
-  const smtpHost = process.env.SMTP_HOST;
-  const smtpUser = process.env.SMTP_USER;
-  const smtpPass = process.env.SMTP_PASS;
 
   const to =
     type === "support"
       ? supportTo || legacyTo
+      : type === "provider"
+      ? providerTo || salesTo || legacyTo
       : type === "project" || type === "msp"
       ? salesTo || legacyTo
       : legacyTo;
 
-  if (!to || !from || !smtpHost || !smtpUser || !smtpPass) {
+  const emailReady = assertEmailReady();
+  if (!to || !emailReady.ok) {
     return NextResponse.json(
       {
         error: "Server not configured (missing env)",
         missing: {
           SUPPORT_TO: type === "support" ? !(supportTo || legacyTo) : false,
           SALES_TO: type === "project" || type === "msp" ? !(salesTo || legacyTo) : false,
+          PROVIDER_TO: type === "provider" ? !(providerTo || salesTo || legacyTo) : false,
           TICKETS_TO: !legacyTo, // legacy fallback
-          TICKETS_FROM: !from,
-          SMTP_HOST: !smtpHost,
-          SMTP_USER: !smtpUser,
-          SMTP_PASS: !smtpPass,
+          ...(emailReady.ok ? {} : emailReady.missing),
         },
       },
       { status: 500 }
@@ -153,12 +228,27 @@ export async function POST(req: Request) {
     company ? ` (${company})` : ""
   }`;
 
+  const providerDetails =
+    type === "provider" && formData
+      ? [
+          `City/State: ${clean(formData.get("cityState"), 160)}`,
+          `Availability: ${clean(formData.get("availability"), 160)}`,
+          `Experience level: ${clean(formData.get("experienceLevel"), 160)}`,
+          `Areas of experience: ${clean(formData.get("areasExperience"), 1200)}`,
+          `Transportation: ${clean(formData.get("transportation"), 240)}`,
+          `Tools/equipment: ${clean(formData.get("tools"), 800)}`,
+          `Certifications: ${clean(formData.get("certifications"), 800) || "None provided"}`,
+        ]
+      : [];
+
   const text = [
     `Type: ${type}`,
+    leadSource ? `Lead source: ${leadSource}` : "",
     `Name: ${name}`,
     `Email: ${email}`,
     phone ? `Phone: ${phone}` : "",
     company ? `Company: ${company}` : "",
+    ...providerDetails,
     `IP: ${ip}`,
     "",
     "Message:",
@@ -168,21 +258,13 @@ export async function POST(req: Request) {
     .join("\n");
 
   try {
-    const transporter = nodemailer.createTransport({
-      host: process.env.SMTP_HOST,
-      port: Number(process.env.SMTP_PORT || 587),
-      secure: process.env.SMTP_SECURE === "true",
-      auth: process.env.SMTP_USER
-        ? { user: process.env.SMTP_USER, pass: process.env.SMTP_PASS }
-        : undefined,
-    });
-
-    await transporter.sendMail({
-      from,
+    await createMailer().sendMail({
+      from: emailReady.config.from,
       to,
       replyTo: email,
       subject,
       text,
+      attachments: attachment ? [attachment] : undefined,
     });
 
     return NextResponse.json({ ok: true });
