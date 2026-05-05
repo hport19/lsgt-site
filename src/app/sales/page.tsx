@@ -115,6 +115,22 @@ export default function SalesPage() {
         <SiteHeader active="msp" />
 
         <main>
+          <section className="border-y border-cyan-300/14 bg-cyan-950/24" data-analytics-section="sales-urgency-strip">
+            <div className="mx-auto flex max-w-6xl flex-col gap-3 px-4 py-3 text-sm text-white/78 sm:flex-row sm:items-center sm:justify-between">
+              <p className="font-medium">
+                If your team is already waiting on IT support, waiting longer usually makes it worse.
+              </p>
+              <Link
+                href="#quick-plan"
+                data-analytics-id="sales-urgency-strip-cta"
+                className="inline-flex w-fit items-center gap-2 rounded-full border border-cyan-200/28 bg-cyan-400/12 px-3 py-1.5 text-xs font-semibold text-cyan-50 hover:bg-cyan-400/18"
+              >
+                Talk to a Real Technician
+                <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" />
+              </Link>
+            </div>
+          </section>
+
           <section id="quick-plan" data-analytics-section="msp-hero" className="mx-auto grid max-w-6xl gap-8 px-4 pb-12 pt-10 md:grid-cols-[1fr_0.92fr] md:items-center md:pb-16 md:pt-16">
             <div>
               <div className="inline-flex items-center gap-2 rounded-full border border-cyan-300/25 bg-cyan-950/24 px-3 py-1.5 text-xs font-semibold text-cyan-50/86">
@@ -128,7 +144,7 @@ export default function SalesPage() {
                 And most companies wait too long to fix it.
               </p>
               <p className="mt-4 max-w-2xl text-lg leading-relaxed text-white/74">
-                Talk to a real technician today and get a simple, practical plan to fix it fast.
+                Talk to a real technician and get a clear next step. No pressure.
               </p>
 
               <div className="mt-7 grid gap-3 sm:grid-cols-2">
@@ -162,12 +178,21 @@ export default function SalesPage() {
             <LeadForm
               formId="msp-hero-form"
               source="sales-hero"
-              title="Get a real IT plan in 15 minutes"
+              title="Get clarity on your IT in the next 15 minutes"
               description="We will review your situation and tell you exactly what to fix first."
               submitLabel="Talk to a Real Technician"
               microcopy="No pressure. Real technician follow-up. Usually within 15-30 minutes."
               className="md:sticky md:top-28"
             />
+          </section>
+
+          <section data-analytics-section="sales-pattern-interrupt" className="border-y border-white/10 bg-slate-950/52">
+            <div className="mx-auto max-w-6xl px-4 py-12 text-center md:py-16">
+              <h2 className="mx-auto max-w-4xl text-3xl font-semibold leading-tight tracking-[0.01em] md:text-5xl">
+                You don&apos;t need more IT tools.
+                <span className="block text-cyan-100">You need someone who actually takes ownership.</span>
+              </h2>
+            </div>
           </section>
 
           <section data-analytics-section="msp-pain" className="border-y border-white/10 bg-white/[0.035]">
@@ -192,6 +217,7 @@ export default function SalesPage() {
               <div className="max-w-3xl">
                 <p className="text-xs font-semibold uppercase tracking-[0.22em] text-red-100/78">Cost of waiting</p>
                 <h2 className="mt-3 text-3xl font-semibold tracking-[0.01em] md:text-4xl">What happens if you don&apos;t fix this?</h2>
+                <p className="mt-3 text-white/66">This is what waiting actually costs you:</p>
               </div>
               <div className="mt-8 grid gap-3 md:grid-cols-5">
                 {consequences.map((item) => (
@@ -203,7 +229,7 @@ export default function SalesPage() {
               </div>
               <div className="mt-7 flex flex-wrap items-center gap-3 rounded-3xl border border-white/10 bg-white/5 p-4">
                 <p className="max-w-2xl text-sm font-semibold text-white/86">
-                  If IT is already slowing the team down, waiting usually makes it more expensive.
+                  If IT is already slowing your team down, waiting makes it worse.
                 </p>
                 <Link
                   href="#quick-plan"
@@ -218,13 +244,12 @@ export default function SalesPage() {
 
           <section data-analytics-section="sales-transition" className="mx-auto max-w-6xl px-4 py-14">
             <div className="rounded-3xl border border-cyan-300/22 bg-cyan-950/14 p-6 md:p-8">
-              <p className="text-xs font-semibold uppercase tracking-[0.22em] text-cyan-100/78">The better path</p>
+              <p className="text-xs font-semibold uppercase tracking-[0.22em] text-cyan-100/78">Relief</p>
               <h2 className="mt-3 max-w-3xl text-3xl font-semibold tracking-[0.01em] md:text-4xl">
-                You do not need a bigger IT mess. You need a clear support path.
+                This is fixable. And it doesn&apos;t require a full IT overhaul.
               </h2>
-              <p className="mt-4 max-w-4xl leading-relaxed text-white/72">
-                Lone Star GlobalTech helps businesses move from reactive IT problems to predictable, relationship-based support:
-                clear helpdesk access, documented systems, security-aware guidance, and a technician who can explain the next step in plain language.
+              <p className="mt-4 max-w-3xl leading-relaxed text-white/72">
+                Lone Star GlobalTech gives you a clear support path, fast help from real people, and practical next steps your team can actually use.
               </p>
             </div>
           </section>
@@ -235,7 +260,6 @@ export default function SalesPage() {
               <div className="absolute inset-0 bg-[linear-gradient(to_top,rgba(3,7,18,0.82),rgba(3,7,18,0.12))]" />
               <div className="absolute bottom-4 left-4 right-4 rounded-2xl border border-white/12 bg-black/36 p-4 backdrop-blur">
                 <p className="text-sm font-semibold text-white">You get a partner, not just a ticket queue.</p>
-                <p className="mt-1 text-sm text-white/72">We focus on follow-through, plain language, and practical next steps.</p>
               </div>
             </div>
             <div>
@@ -257,10 +281,7 @@ export default function SalesPage() {
           <section data-analytics-section="sales-proof" className="mx-auto max-w-6xl px-4 pb-16">
             <div className="max-w-3xl">
               <p className="text-xs font-semibold uppercase tracking-[0.22em] text-cyan-100/78">Proof</p>
-              <h2 className="mt-3 text-3xl font-semibold tracking-[0.01em] md:text-4xl">Real support for real businesses.</h2>
-              <p className="mt-3 leading-relaxed text-white/68">
-                Local teams trust GlobalTech because the work is documented, responsive, and handled by people who understand field realities.
-              </p>
+              <h2 className="mt-3 text-3xl font-semibold tracking-[0.01em] md:text-4xl">What working with us actually feels like:</h2>
             </div>
             <div className="mt-8 grid gap-4 md:grid-cols-3">
               {proofCards.map((card) => (
@@ -293,9 +314,9 @@ export default function SalesPage() {
           <section data-analytics-section="msp-mid-form" className="border-y border-white/10 bg-white/[0.035]">
             <div className="mx-auto grid max-w-6xl gap-8 px-4 py-14 md:grid-cols-[0.9fr_1.1fr] md:items-center">
               <div>
-                <h2 className="text-3xl font-semibold tracking-[0.01em]">Want us to look at your current IT setup?</h2>
+                <h2 className="text-3xl font-semibold tracking-[0.01em]">Want clarity before the next IT issue hits?</h2>
                 <p className="mt-3 leading-relaxed text-white/70">
-                  Send us the basics and we will tell you the practical next step. No overcomplicated proposal just to start a conversation.
+                  Send the basics. We will review your situation and tell you what to fix first.
                 </p>
               </div>
               <LeadForm
@@ -313,11 +334,8 @@ export default function SalesPage() {
           <section data-analytics-section="msp-trust" className="mx-auto grid max-w-6xl gap-8 px-4 pb-16 md:grid-cols-[1fr_0.95fr] md:items-center">
             <div>
               <p className="text-xs font-semibold uppercase tracking-[0.22em] text-emerald-100/78">Trust and accountability</p>
-              <h2 className="mt-3 text-3xl font-semibold tracking-[0.01em] md:text-4xl">Not every IT provider has this level of accountability.</h2>
-              <p className="mt-4 leading-relaxed text-white/70">
-                When your IT provider touches cameras, access, networks, devices, and sensitive systems, accountability matters.
-                Our Texas DPS Private Security License helps reinforce that we take security-related work seriously.
-              </p>
+              <h2 className="mt-3 text-3xl font-semibold tracking-[0.01em] md:text-4xl">If your IT touches security, accountability matters.</h2>
+              <p className="mt-4 text-xl font-semibold text-white/86">Not every provider is licensed for that.</p>
               <div className="mt-5">
                 <DpsTrustBadge />
               </div>
@@ -326,8 +344,7 @@ export default function SalesPage() {
               <ShieldCheck className="h-8 w-8 text-emerald-200" aria-hidden="true" />
               <h3 className="mt-4 text-2xl font-semibold">A visible trust signal for security-related work.</h3>
               <p className="mt-3 leading-relaxed text-white/68">
-                It is not a slogan. It is a meaningful differentiator when your business wants IT help from a team that understands
-                compliance, physical security, and technology operations together.
+                Cameras, access, networks, devices, and sensitive systems need a higher level of responsibility.
               </p>
             </div>
           </section>
@@ -353,9 +370,9 @@ export default function SalesPage() {
           <section data-analytics-section="msp-final-form" className="mx-auto grid max-w-6xl gap-8 px-4 py-16 md:grid-cols-[0.9fr_1.1fr] md:items-start">
             <div>
               <p className="text-xs font-semibold uppercase tracking-[0.22em] text-cyan-100/78">Final step</p>
-              <h2 className="mt-3 text-3xl font-semibold tracking-[0.01em] md:text-4xl">Let&apos;s fix your IT before it becomes a bigger problem.</h2>
+              <h2 className="mt-3 text-3xl font-semibold tracking-[0.01em] md:text-4xl">Let&apos;s fix this before it slows your business down even more.</h2>
               <p className="mt-4 leading-relaxed text-white/70">
-                You do not have to keep guessing what to do next. Send us the basics and we will follow up with a practical next step.
+                You don&apos;t need a full overhaul. You just need the right next step.
               </p>
               <div className="mt-6 rounded-2xl border border-white/10 bg-white/5 p-4 text-sm text-white/72">
                 Prefer to call? <a href={SITE.phoneHref} className="font-semibold text-white hover:text-cyan-100">{SITE.phone}</a>
