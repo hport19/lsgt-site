@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { SITE } from "@/src/lib/site-config";
 
-export type UserIntentState = "exploring" | "considering" | "ready";
+export type UserIntentStage = "early" | "considering" | "hesitating" | "ready";
 
 export function useScrollPosition() {
   const [position, setPosition] = useState({ y: 0, depth: 0 });
@@ -40,11 +40,12 @@ export function useScrollPosition() {
 export function useUserIntent() {
   const { depth } = useScrollPosition();
   const [secondsOnPage, setSecondsOnPage] = useState(0);
+  const [idleTime, setIdleTime] = useState(0);
   const [visibleSections, setVisibleSections] = useState<string[]>([]);
+  const [activeSection, setActiveSection] = useState("hero");
   const [ctaHovers, setCtaHovers] = useState(0);
   const [ctaClicks, setCtaClicks] = useState(0);
-  const [hasInteracted, setHasInteracted] = useState(false);
-  const [showNudge, setShowNudge] = useState(false);
+  const [exitIntentTriggered, setExitIntentTriggered] = useState(false);
   const [heroMessageShifted, setHeroMessageShifted] = useState(false);
 
   useEffect(() => {
@@ -57,10 +58,32 @@ export function useUserIntent() {
   }, []);
 
   useEffect(() => {
-    if (hasInteracted) return;
-    const nudgeTimer = window.setTimeout(() => setShowNudge(true), 55000);
-    return () => window.clearTimeout(nudgeTimer);
-  }, [hasInteracted]);
+    const resetIdle = () => setIdleTime(0);
+    const idleInterval = window.setInterval(() => setIdleTime((value) => value + 5), 5000);
+
+    window.addEventListener("mousemove", resetIdle, { passive: true });
+    window.addEventListener("keydown", resetIdle);
+    window.addEventListener("scroll", resetIdle, { passive: true });
+    window.addEventListener("touchstart", resetIdle, { passive: true });
+    window.addEventListener("click", resetIdle);
+    return () => {
+      window.clearInterval(idleInterval);
+      window.removeEventListener("mousemove", resetIdle);
+      window.removeEventListener("keydown", resetIdle);
+      window.removeEventListener("scroll", resetIdle);
+      window.removeEventListener("touchstart", resetIdle);
+      window.removeEventListener("click", resetIdle);
+    };
+  }, []);
+
+  useEffect(() => {
+    const onMouseOut = (event: MouseEvent) => {
+      if (event.clientY <= 0) setExitIntentTriggered(true);
+    };
+
+    document.addEventListener("mouseout", onMouseOut);
+    return () => document.removeEventListener("mouseout", onMouseOut);
+  }, []);
 
   useEffect(() => {
     if (!("IntersectionObserver" in window)) return;
@@ -71,6 +94,7 @@ export function useUserIntent() {
           if (!entry.isIntersecting) continue;
           const section = entry.target.getAttribute("data-intent-section");
           if (!section) continue;
+          setActiveSection(section);
           setVisibleSections((current) => (current.includes(section) ? current : [...current, section]));
         }
       },
@@ -82,8 +106,7 @@ export function useUserIntent() {
   }, []);
 
   const registerInteraction = useCallback(() => {
-    setHasInteracted(true);
-    setShowNudge(false);
+    setIdleTime(0);
   }, []);
 
   const registerCtaHover = useCallback(() => {
@@ -96,27 +119,34 @@ export function useUserIntent() {
     setCtaClicks((value) => value + 1);
   }, [registerInteraction]);
 
-  const state: UserIntentState = useMemo(() => {
-    const reachedReadySection = visibleSections.some((section) => ["sales-proof", "msp-trust", "msp-faq", "msp-final-form"].includes(section));
+  const stage: UserIntentStage = useMemo(() => {
+    const reachedReadySection = visibleSections.some((section) => ["proof", "trust", "faq", "final"].includes(section));
     const reachedConsideringSection = visibleSections.some((section) =>
-      ["msp-pain", "sales-consequences", "sales-transition", "msp-services"].includes(section)
+      ["problems", "cost", "relief", "services"].includes(section)
     );
 
     if (depth >= 68 || reachedReadySection || ctaClicks > 0) return "ready";
+    if (idleTime >= 20 || exitIntentTriggered) return "hesitating";
     if (depth >= 26 || secondsOnPage >= 20 || reachedConsideringSection || ctaHovers > 0) return "considering";
-    return "exploring";
-  }, [ctaClicks, ctaHovers, depth, secondsOnPage, visibleSections]);
+    return "early";
+  }, [ctaClicks, ctaHovers, depth, exitIntentTriggered, idleTime, secondsOnPage, visibleSections]);
 
   const hasSeen = useCallback((section: string) => visibleSections.includes(section), [visibleSections]);
 
   return {
-    state,
-    isReady: state === "ready",
+    stage,
+    state: stage,
+    isReady: stage === "ready",
     depth,
+    scrollDepth: depth,
     secondsOnPage,
+    idleTime,
     visibleSections,
+    sectionsViewed: visibleSections,
+    activeSection,
+    exitIntentTriggered,
     heroMessageShifted,
-    showNudge,
+    showHesitationPrompt: idleTime >= 20 || exitIntentTriggered,
     hasSeen,
     registerInteraction,
     registerCtaHover,
@@ -124,16 +154,22 @@ export function useUserIntent() {
   };
 }
 
-export function useDynamicCTA(intentState: UserIntentState) {
+export function useDynamicCTA(intent: UserIntentStage | { stage: UserIntentStage }) {
+  const stage = typeof intent === "string" ? intent : intent.stage;
+
   return useMemo(() => {
-    if (intentState === "ready") {
-      return { label: "Talk to a real technician now", href: SITE.phoneHref };
+    if (stage === "ready") {
+      return { label: "Talk to a Real Technician", href: SITE.phoneHref };
     }
 
-    if (intentState === "considering") {
-      return { label: "Get clarity on what to fix first", href: "#quick-plan" };
+    if (stage === "hesitating") {
+      return { label: "Fix This Before It Gets Worse", href: "#quick-plan" };
     }
 
-    return { label: "See what's slowing your team down", href: "#msp-pain" };
-  }, [intentState]);
+    if (stage === "considering") {
+      return { label: "See What to Fix First", href: "#quick-plan" };
+    }
+
+    return { label: "Get a Quick IT Plan", href: "#quick-plan" };
+  }, [stage]);
 }

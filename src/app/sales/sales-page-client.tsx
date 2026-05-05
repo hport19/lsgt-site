@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { AlertTriangle, ArrowRight, CheckCircle2, Clock, HelpCircle, ShieldCheck } from "lucide-react";
@@ -63,6 +64,13 @@ const proofCards = [
     author: "General Manager, Best Buy Amarillo",
     label: "Field service customer",
   },
+  {
+    image: "/msp/support-tech.jpg",
+    quote:
+      "They stabilized our systems in under 2 weeks and reduced downtime significantly.",
+    author: "Local business client",
+    label: "Managed IT outcome",
+  },
 ] as const;
 
 const faqs = [
@@ -81,6 +89,10 @@ const faqs = [
   {
     q: "What does the Texas DPS license mean for MSP customers?",
     a: "It adds accountability when IT, cameras, access, and security-related work overlap.",
+  },
+  {
+    q: "What happens after I submit the form?",
+    a: "We review your situation and tell you exactly what to fix first. No pressure.",
   },
 ] as const;
 
@@ -133,14 +145,82 @@ function IntentCta({ href, label, analyticsId, className, onHover, onClick }: In
   );
 }
 
+type StickyCTAProps = {
+  show: boolean;
+  label: string;
+  href: string;
+  isReady: boolean;
+  onHover: () => void;
+  onClick: () => void;
+};
+
+function StickyCTA({ show, label, href, isReady, onHover, onClick }: StickyCTAProps) {
+  if (!show) return null;
+
+  return (
+    <IntentCta
+      href={href}
+      label={label}
+      analyticsId="sales-sticky-cta"
+      className={cx(
+        "fixed bottom-4 left-4 right-4 z-40 inline-flex items-center justify-center rounded-2xl bg-cyan-500 px-5 py-3 text-sm font-semibold text-white shadow-[0_18px_48px_rgba(0,0,0,0.45),0_0_34px_rgba(34,211,238,0.24)] transition duration-300 hover:-translate-y-0.5 hover:bg-cyan-400 md:left-auto md:right-6 md:w-auto",
+        isReady && "animate-pulse"
+      )}
+      onHover={onHover}
+      onClick={onClick}
+    />
+  );
+}
+
+type HesitationModalProps = {
+  open: boolean;
+  onClose: () => void;
+  onCtaClick: () => void;
+};
+
+function HesitationModal({ open, onClose, onCtaClick }: HesitationModalProps) {
+  if (!open) return null;
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/42 px-4 pb-4 backdrop-blur-[2px] md:items-center md:pb-0" role="dialog" aria-modal="true">
+      <div className="w-full max-w-md rounded-3xl border border-white/12 bg-slate-950/94 p-5 shadow-[0_28px_90px_rgba(0,0,0,0.58)]">
+        <div className="flex items-start justify-between gap-4">
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-cyan-100/78">Quick answer</p>
+            <h2 className="mt-2 text-2xl font-semibold">Before you go, want a quick answer?</h2>
+          </div>
+          <button type="button" onClick={onClose} className="rounded-full border border-white/10 px-3 py-1 text-sm text-white/62 transition hover:bg-white/8 hover:text-white">
+            Close
+          </button>
+        </div>
+        <p className="mt-3 text-sm leading-relaxed text-white/70">
+          We can tell you what to fix first in minutes.
+        </p>
+        <Link
+          href="#quick-plan"
+          data-analytics-id="sales-hesitation-modal-cta"
+          onClick={onCtaClick}
+          className="mt-5 inline-flex w-full items-center justify-center rounded-2xl bg-cyan-500 px-5 py-3 text-sm font-semibold text-white shadow-[0_0_28px_rgba(34,211,238,0.24)] transition hover:-translate-y-0.5 hover:bg-cyan-400"
+        >
+          Get My Fix Plan
+        </Link>
+      </div>
+    </div>
+  );
+}
+
 export default function SalesPageClient() {
   const intent = useUserIntent();
-  const dynamicCta = useDynamicCTA(intent.state);
-  const readyFormClass = intent.isReady ? "ring-2 ring-cyan-300/35 shadow-[0_0_80px_rgba(34,211,238,0.18)]" : "";
-  const formMicrocopy = intent.isReady
-    ? "Spots fill quickly during business hours. No pressure. Clear next step, fast."
-    : "No pressure. Clear next step, fast. Usually within 15-30 minutes.";
-  const heroSupport = intent.heroMessageShifted
+  const dynamicCta = useDynamicCTA(intent);
+  const [dismissedHesitation, setDismissedHesitation] = useState(false);
+  const shouldEnhanceForm = intent.scrollDepth >= 60;
+  const readyFormClass = shouldEnhanceForm ? "scale-[1.01] ring-2 ring-cyan-300/35 shadow-[0_0_80px_rgba(34,211,238,0.18)]" : "";
+  const formMicrocopy = intent.stage === "hesitating"
+    ? "Most teams wait too long. You don't have to. No pressure. No sales pitch. Just a clear next step."
+    : intent.scrollDepth > 50
+      ? "Waiting usually makes this more expensive. No pressure. No sales pitch. Just a clear next step."
+      : "No pressure. No sales pitch. Just a clear next step.";
+  const heroSupport = intent.heroMessageShifted || intent.stage === "hesitating"
     ? "Most teams in your position wait too long. You don't have to."
     : "Talk to a real technician and get a clear next step. No pressure.";
 
@@ -170,7 +250,7 @@ export default function SalesPageClient() {
           <section
             id="quick-plan"
             data-analytics-section="msp-hero"
-            data-intent-section="msp-hero"
+            data-intent-section="hero"
             data-reveal
             className="mx-auto grid max-w-6xl gap-8 px-4 pb-12 pt-10 md:grid-cols-[1fr_0.92fr] md:items-center md:pb-16 md:pt-16"
           >
@@ -204,16 +284,14 @@ export default function SalesPageClient() {
               </div>
 
               <div className="mt-7 flex flex-wrap gap-3">
-                <a
-                  href={SITE.phoneHref}
-                  data-analytics-id="sales-hero-phone"
+                <IntentCta
+                  href={dynamicCta.href}
+                  label={dynamicCta.label}
+                  analyticsId="sales-hero-primary"
                   className={primaryCtaClass}
-                  onMouseEnter={intent.registerCtaHover}
-                  onFocus={intent.registerCtaHover}
+                  onHover={intent.registerCtaHover}
                   onClick={intent.registerCtaClick}
-                >
-                  Talk to a Real Technician
-                </a>
+                />
                 <Link
                   href="#quick-plan"
                   data-analytics-id="sales-hero-free-plan"
@@ -240,10 +318,11 @@ export default function SalesPageClient() {
               formId="msp-hero-form"
               source="sales-hero"
               title="Get clarity on your IT in the next 15 minutes"
-              description="Tell us the basics. We will tell you what to fix first."
+              description="Tell us what's going wrong. We'll tell you what to fix first."
               submitLabel="Talk to a Real Technician"
               microcopy={formMicrocopy}
-              autoFocusFirstInput={intent.isReady}
+              autoFocusFirstInput={shouldEnhanceForm}
+              showNextSteps
               className={cx("md:sticky md:top-28 transition duration-500", readyFormClass)}
             />
           </section>
@@ -260,7 +339,7 @@ export default function SalesPageClient() {
           <section
             id="msp-pain"
             data-analytics-section="msp-pain"
-            data-intent-section="msp-pain"
+            data-intent-section="problems"
             data-reveal
             className="border-y border-white/10 bg-white/[0.035]"
           >
@@ -280,7 +359,7 @@ export default function SalesPageClient() {
                     <AlertTriangle className="mt-0.5 h-5 w-5 shrink-0 text-amber-200" aria-hidden="true" />
                     <div>
                       <span>{point}</span>
-                      {index === painPoints.length - 1 && intent.hasSeen("msp-pain") ? (
+                      {index === painPoints.length - 1 && intent.hasSeen("problems") ? (
                         <p className="mt-2 text-xs font-semibold text-cyan-100/72">This usually shows up when teams scale past 10-20 people.</p>
                       ) : null}
                     </div>
@@ -303,7 +382,7 @@ export default function SalesPageClient() {
 
           <section
             data-analytics-section="sales-consequences"
-            data-intent-section="sales-consequences"
+            data-intent-section="cost"
             data-reveal
             className="border-b border-white/10 bg-red-950/10"
           >
@@ -312,7 +391,7 @@ export default function SalesPageClient() {
                 <p className="text-xs font-semibold uppercase tracking-[0.22em] text-red-100/78">Cost of waiting</p>
                 <h2 className="mt-3 text-3xl font-semibold tracking-[0.01em] md:text-4xl">What happens if you don&apos;t fix this?</h2>
                 <p className="mt-3 text-white/66">This is what waiting actually costs you:</p>
-                {intent.hasSeen("sales-consequences") ? (
+                {intent.hasSeen("cost") ? (
                   <p className="mt-3 inline-flex rounded-full border border-red-200/20 bg-red-950/24 px-3 py-1.5 text-xs font-semibold text-red-50/82">
                     This is where most budgets quietly leak.
                   </p>
@@ -347,22 +426,33 @@ export default function SalesPageClient() {
             </div>
           </section>
 
-          <section data-analytics-section="sales-transition" data-intent-section="sales-transition" data-reveal className="mx-auto max-w-6xl px-4 py-14">
+          <section data-analytics-section="sales-transition" data-intent-section="relief" data-reveal className="mx-auto max-w-6xl px-4 py-14">
             <div className="rounded-3xl border border-cyan-300/22 bg-cyan-950/14 p-6 md:p-8">
               <p className="text-xs font-semibold uppercase tracking-[0.22em] text-cyan-100/78">Relief</p>
               <h2 className="mt-3 max-w-3xl text-3xl font-semibold tracking-[0.01em] md:text-4xl">
-                This is fixable. And it doesn&apos;t require a full IT overhaul.
+                You don&apos;t need to rebuild your IT. You just need the right fixes.
               </h2>
               <p className="mt-4 max-w-3xl leading-relaxed text-white/72">
                 Clear next step. Fast follow-up. No full overhaul just to get started.
               </p>
+              <div className="mt-5 flex flex-wrap items-center gap-3 rounded-2xl border border-white/10 bg-white/5 p-4">
+                <p className="text-sm font-semibold text-white/84">This is fixable. Want help?</p>
+                <IntentCta
+                  href={dynamicCta.href}
+                  label={dynamicCta.label}
+                  analyticsId="sales-relief-cta"
+                  className={primaryCtaClass}
+                  onHover={intent.registerCtaHover}
+                  onClick={intent.registerCtaClick}
+                />
+              </div>
             </div>
           </section>
 
           <section
             id="services"
             data-analytics-section="msp-services"
-            data-intent-section="msp-services"
+            data-intent-section="services"
             data-reveal
             className="mx-auto grid max-w-6xl gap-8 px-4 py-16 md:grid-cols-[0.9fr_1.1fr] md:items-center"
           >
@@ -394,13 +484,13 @@ export default function SalesPageClient() {
             </div>
           </section>
 
-          <section data-analytics-section="sales-proof" data-intent-section="sales-proof" data-reveal className="mx-auto max-w-6xl px-4 pb-16">
+          <section data-analytics-section="sales-proof" data-intent-section="proof" data-reveal className="mx-auto max-w-6xl px-4 pb-16">
             <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
               <div className="max-w-3xl">
                 <p className="text-xs font-semibold uppercase tracking-[0.22em] text-cyan-100/78">Proof</p>
                 <h2 className="mt-3 text-3xl font-semibold tracking-[0.01em] md:text-4xl">What working with us actually feels like:</h2>
               </div>
-              {intent.hasSeen("sales-proof") ? (
+              {intent.hasSeen("proof") ? (
                 <div className="w-fit rounded-full border border-emerald-200/20 bg-emerald-950/18 px-3 py-1.5 text-xs font-semibold text-emerald-50/82">
                   Trusted by growing teams across Texas
                 </div>
@@ -448,10 +538,11 @@ export default function SalesPageClient() {
                 formId="msp-mid-form"
                 source="sales-mid"
                 title="Talk to a real technician about your IT setup"
-                description="Send the basics. We will tell you what to fix first."
+                description="Tell us what's going wrong. We'll tell you what to fix first."
                 submitLabel="Talk to a Real Technician"
                 microcopy={formMicrocopy}
-                autoFocusFirstInput={intent.isReady}
+                autoFocusFirstInput={shouldEnhanceForm}
+                showNextSteps
                 className={cx("transition duration-500", readyFormClass)}
                 showMessage
               />
@@ -460,7 +551,7 @@ export default function SalesPageClient() {
 
           <section
             data-analytics-section="msp-trust"
-            data-intent-section="msp-trust"
+            data-intent-section="trust"
             data-reveal
             className="mx-auto grid max-w-6xl gap-8 px-4 pb-16 pt-16 md:grid-cols-[1fr_0.95fr] md:items-center"
           >
@@ -468,7 +559,7 @@ export default function SalesPageClient() {
               <p className="text-xs font-semibold uppercase tracking-[0.22em] text-emerald-100/78">Trust and accountability</p>
               <h2 className="mt-3 text-3xl font-semibold tracking-[0.01em] md:text-4xl">If your IT touches security, accountability matters.</h2>
               <p className="mt-4 text-xl font-semibold text-white/86">Not every provider is licensed for that.</p>
-              {intent.hasSeen("msp-trust") ? (
+              {intent.hasSeen("trust") ? (
                 <p className="mt-3 inline-flex rounded-full border border-emerald-200/20 bg-emerald-950/18 px-3 py-1.5 text-xs font-semibold text-emerald-50/82">
                   Most companies only notice this after a breach.
                 </p>
@@ -486,7 +577,7 @@ export default function SalesPageClient() {
             </div>
           </section>
 
-          <section data-analytics-section="msp-faq" data-intent-section="msp-faq" data-reveal className="border-y border-white/10 bg-white/[0.035]">
+          <section data-analytics-section="msp-faq" data-intent-section="faq" data-reveal className="border-y border-white/10 bg-white/[0.035]">
             <div className="mx-auto max-w-6xl px-4 py-14">
               <div className="max-w-3xl">
                 <p className="text-xs font-semibold uppercase tracking-[0.22em] text-cyan-100/78">FAQ</p>
@@ -511,7 +602,7 @@ export default function SalesPageClient() {
 
           <section
             data-analytics-section="msp-final-form"
-            data-intent-section="msp-final-form"
+            data-intent-section="final"
             data-reveal
             className="mx-auto grid max-w-6xl gap-8 px-4 py-16 md:grid-cols-[0.9fr_1.1fr] md:items-start"
           >
@@ -519,7 +610,7 @@ export default function SalesPageClient() {
               <p className="text-xs font-semibold uppercase tracking-[0.22em] text-cyan-100/78">Final step</p>
               <div className="mb-5 rounded-2xl border border-amber-200/18 bg-amber-950/16 p-4 text-sm font-semibold text-amber-50/88">
                 At this point, you already know if this is happening to your team.
-                {intent.isReady ? <span className="block pt-1 text-amber-50">And if it is, waiting usually makes it worse.</span> : null}
+                {intent.stage === "ready" ? <span className="block pt-1 text-amber-50">And if it is, waiting usually makes it worse.</span> : null}
               </div>
               <h2 className="mt-3 text-3xl font-semibold tracking-[0.01em] md:text-4xl">Let&apos;s fix this before it slows your business down even more.</h2>
               <p className="mt-4 leading-relaxed text-white/70">
@@ -533,34 +624,34 @@ export default function SalesPageClient() {
               formId="msp-final-form"
               source="sales-final"
               title="Talk to a Real Technician"
-              description="Send the basics. We will tell you what to fix first."
+              description="Tell us what's going wrong. We'll tell you what to fix first."
               submitLabel="Talk to a Real Technician"
               microcopy={formMicrocopy}
-              autoFocusFirstInput={intent.isReady}
+              autoFocusFirstInput={shouldEnhanceForm}
+              showNextSteps
               className={cx("transition duration-500", readyFormClass)}
               showMessage
             />
           </section>
         </main>
 
-        {intent.showNudge ? (
-          <button
-            type="button"
-            onClick={intent.registerInteraction}
-            className="fixed bottom-20 left-4 right-4 z-40 rounded-2xl border border-white/12 bg-slate-950/88 px-4 py-3 text-left text-sm font-medium text-white/82 shadow-[0_18px_48px_rgba(0,0,0,0.45)] backdrop-blur transition hover:border-cyan-200/24 md:left-auto md:right-6 md:max-w-sm"
-          >
-            Not sure yet? We&apos;ll just tell you what to fix first. No commitment.
-          </button>
-        ) : null}
+        <HesitationModal
+          open={intent.showHesitationPrompt && !dismissedHesitation}
+          onClose={() => {
+            setDismissedHesitation(true);
+            intent.registerInteraction();
+          }}
+          onCtaClick={() => {
+            setDismissedHesitation(true);
+            intent.registerCtaClick();
+          }}
+        />
 
-        <IntentCta
+        <StickyCTA
+          show={intent.scrollDepth >= 30}
           href={dynamicCta.href}
           label={dynamicCta.label}
-          analyticsId="sales-sticky-cta"
-          className={cx(
-            "fixed bottom-4 left-4 right-4 z-40 inline-flex items-center justify-center rounded-2xl bg-cyan-500 px-5 py-3 text-sm font-semibold text-white shadow-[0_18px_48px_rgba(0,0,0,0.45),0_0_34px_rgba(34,211,238,0.24)] transition duration-300 hover:-translate-y-0.5 hover:bg-cyan-400 md:left-auto md:right-6 md:w-auto",
-            intent.isReady && "animate-pulse"
-          )}
+          isReady={intent.stage === "ready"}
           onHover={intent.registerCtaHover}
           onClick={intent.registerCtaClick}
         />

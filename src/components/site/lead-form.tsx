@@ -13,6 +13,7 @@ type LeadFormProps = {
   showMessage?: boolean;
   microcopy?: string;
   autoFocusFirstInput?: boolean;
+  showNextSteps?: boolean;
 };
 
 const inputClass =
@@ -21,13 +22,14 @@ const inputClass =
 export function LeadForm({
   formId,
   title = "Get a quick IT plan",
-  description = "Share the basics. A real technician will follow up with a practical next step.",
+  description = "Tell us what's going wrong. We'll tell you what to fix first.",
   submitLabel = "Send my request",
   source,
   className = "",
   showMessage = false,
-  microcopy = "No pressure. We use this to follow up with the right person and a practical next step.",
+  microcopy = "No pressure. No sales pitch. Just a clear next step.",
   autoFocusFirstInput = false,
+  showNextSteps = false,
 }: LeadFormProps) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -173,6 +175,19 @@ export function LeadForm({
         {loading ? "Sending..." : submitLabel}
       </button>
       <p className="mt-3 text-xs leading-relaxed text-white/48">{microcopy}</p>
+      {showNextSteps ? (
+        <div className="mt-4 rounded-2xl border border-white/10 bg-black/18 p-4">
+          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-cyan-100/78">What happens next</p>
+          <ul className="mt-3 grid gap-2 text-sm text-white/68">
+            {["We review your situation", "A real technician reaches out", "You get a clear fix plan"].map((step) => (
+              <li key={step} className="flex gap-2">
+                <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-cyan-200" aria-hidden="true" />
+                <span>{step}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      ) : null}
     </form>
   );
 }
