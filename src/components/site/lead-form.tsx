@@ -11,6 +11,7 @@ type LeadFormProps = {
   source: string;
   className?: string;
   showMessage?: boolean;
+  microcopy?: string;
 };
 
 const inputClass =
@@ -24,6 +25,7 @@ export function LeadForm({
   source,
   className = "",
   showMessage = false,
+  microcopy = "No pressure. We use this to follow up with the right person and a practical next step.",
 }: LeadFormProps) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -132,7 +134,7 @@ export function LeadForm({
       >
         {loading ? "Sending..." : submitLabel}
       </button>
-      <p className="mt-3 text-xs leading-relaxed text-white/48">No pressure. We use this to follow up with the right person and a practical next step.</p>
+      <p className="mt-3 text-xs leading-relaxed text-white/48">{microcopy}</p>
     </form>
   );
 }

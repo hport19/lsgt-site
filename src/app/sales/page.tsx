@@ -56,6 +56,14 @@ const trustBadges = [
   { title: "Security-Aware IT", text: "Devices, networks, users, and risk" },
 ] as const;
 
+const consequences = [
+  "Small IT issues turn into downtime.",
+  "Your team keeps waiting for support.",
+  "Security risks go unnoticed.",
+  "Costs stay unpredictable.",
+  "You lose time focusing on IT instead of your business.",
+] as const;
+
 const proofCards = [
   {
     image: "/projects/zhx/1.jpg",
@@ -123,10 +131,10 @@ export default function SalesPage() {
                 Free consultation for growing businesses
               </div>
               <h1 className="mt-5 max-w-3xl text-4xl font-semibold leading-[1.04] tracking-[0.01em] md:text-6xl">
-                Stop dealing with slow IT support and constant tech issues.
+                Your IT issues are costing you time, money, and team productivity.
               </h1>
               <p className="mt-5 max-w-2xl text-lg leading-relaxed text-white/74">
-                Talk to a real technician today and get a simple IT plan for your business. No pressure, no confusing tech talk, just a practical next step.
+                Talk to a real technician today and get a simple, practical plan to fix it fast.
               </p>
 
               <div className="mt-7 grid gap-3 sm:grid-cols-2">
@@ -147,17 +155,23 @@ export default function SalesPage() {
                   <ArrowRight className="h-4 w-4" aria-hidden="true" />
                 </Link>
               </div>
-              <p className="mt-4 max-w-xl text-xs leading-relaxed text-white/56">
-                Free consultation. No pressure. Real technician follow-up. We usually respond within 15-30 minutes during business hours.
-              </p>
+              <div className="mt-4 grid max-w-2xl gap-2 text-xs text-white/62 sm:grid-cols-2">
+                {["Free consultation", "No pressure", "Real technician, not sales", "Response within ~15-30 minutes"].map((item) => (
+                  <div key={item} className="flex items-center gap-2">
+                    <CheckCircle2 className="h-3.5 w-3.5 shrink-0 text-cyan-200" aria-hidden="true" />
+                    <span>{item}</span>
+                  </div>
+                ))}
+              </div>
             </div>
 
             <LeadForm
               formId="msp-hero-form"
               source="sales-hero"
-              title="Get a quick IT plan from a real technician"
-              description="Send the basics now. We will follow up with the right person and recommend a practical next step."
+              title="Get a real IT plan in 15 minutes"
+              description="We will review your situation and tell you exactly what to fix first."
               submitLabel="Talk to a Real Technician"
+              microcopy="No pressure. We use this to follow up with a practical next step."
               className="md:sticky md:top-28"
             />
           </section>
@@ -175,6 +189,35 @@ export default function SalesPage() {
                     <span>{point}</span>
                   </div>
                 ))}
+              </div>
+            </div>
+          </section>
+
+          <section data-analytics-section="sales-consequences" className="border-b border-white/10 bg-red-950/10">
+            <div className="mx-auto max-w-6xl px-4 py-14">
+              <div className="max-w-3xl">
+                <p className="text-xs font-semibold uppercase tracking-[0.22em] text-red-100/78">Cost of waiting</p>
+                <h2 className="mt-3 text-3xl font-semibold tracking-[0.01em] md:text-4xl">What happens if you don&apos;t fix this?</h2>
+              </div>
+              <div className="mt-8 grid gap-3 md:grid-cols-5">
+                {consequences.map((item) => (
+                  <div key={item} className="rounded-2xl border border-red-300/18 bg-red-950/18 p-4 text-sm leading-relaxed text-white/76">
+                    <AlertTriangle className="mb-3 h-5 w-5 text-red-200" aria-hidden="true" />
+                    {item}
+                  </div>
+                ))}
+              </div>
+              <div className="mt-7 flex flex-wrap items-center gap-3 rounded-3xl border border-white/10 bg-white/5 p-4">
+                <p className="max-w-2xl text-sm font-semibold text-white/86">
+                  If IT is already slowing the team down, waiting usually makes it more expensive.
+                </p>
+                <Link
+                  href="#quick-plan"
+                  data-analytics-id="sales-consequence-cta"
+                  className="inline-flex rounded-2xl bg-cyan-500 px-5 py-3 text-sm font-semibold text-white hover:bg-cyan-400"
+                >
+                  Talk to a Real Technician
+                </Link>
               </div>
             </div>
           </section>
@@ -276,9 +319,10 @@ export default function SalesPage() {
               <LeadForm
                 formId="msp-mid-form"
                 source="sales-mid"
-                title="Request My IT Assessment"
-                description="We will review your users, devices, network, email, security basics, and support needs."
-                submitLabel="Request My IT Assessment"
+                title="Talk to a real technician about your IT setup"
+                description="We will review your situation and tell you exactly what to fix first."
+                submitLabel="Talk to a Real Technician"
+                microcopy="No pressure. We use this to follow up with a practical next step."
                 showMessage
               />
             </div>
@@ -327,7 +371,7 @@ export default function SalesPage() {
           <section data-analytics-section="msp-final-form" className="mx-auto grid max-w-6xl gap-8 px-4 py-16 md:grid-cols-[0.9fr_1.1fr] md:items-start">
             <div>
               <p className="text-xs font-semibold uppercase tracking-[0.22em] text-cyan-100/78">Final step</p>
-              <h2 className="mt-3 text-3xl font-semibold tracking-[0.01em] md:text-4xl">Let&apos;s fix your IT situation.</h2>
+              <h2 className="mt-3 text-3xl font-semibold tracking-[0.01em] md:text-4xl">Let&apos;s fix your IT before it becomes a bigger problem.</h2>
               <p className="mt-4 leading-relaxed text-white/70">
                 You do not have to keep guessing what to do next. Send us the basics and we will follow up with a practical next step.
               </p>
@@ -339,8 +383,9 @@ export default function SalesPage() {
               formId="msp-final-form"
               source="sales-final"
               title="Talk to a Real Technician"
-              description="Tell us where support is falling short. We will reply with a right-sized next step."
+              description="We will review your situation and tell you exactly what to fix first."
               submitLabel="Talk to a Real Technician"
+              microcopy="No pressure. We use this to follow up with a practical next step."
               showMessage
             />
           </section>
