@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { trackAnalyticsEvent } from "@/src/components/analytics/analytics-provider";
 
 type LeadFormProps = {
@@ -12,6 +12,7 @@ type LeadFormProps = {
   className?: string;
   showMessage?: boolean;
   microcopy?: string;
+  autoFocusFirstInput?: boolean;
 };
 
 const inputClass =
@@ -26,10 +27,46 @@ export function LeadForm({
   className = "",
   showMessage = false,
   microcopy = "No pressure. We use this to follow up with the right person and a practical next step.",
+  autoFocusFirstInput = false,
 }: LeadFormProps) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
+  const formRef = useRef<HTMLFormElement>(null);
+  const firstInputRef = useRef<HTMLInputElement>(null);
+  const didAutoFocusRef = useRef(false);
+
+  useEffect(() => {
+    if (!autoFocusFirstInput || didAutoFocusRef.current || !formRef.current || !firstInputRef.current) return;
+
+    const focusFirstInput = () => {
+      const active = document.activeElement;
+      if (active && active !== document.body && active !== document.documentElement) {
+        didAutoFocusRef.current = true;
+        return;
+      }
+
+      firstInputRef.current?.focus({ preventScroll: true });
+      didAutoFocusRef.current = true;
+    };
+
+    if (!("IntersectionObserver" in window)) {
+      focusFirstInput();
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry?.isIntersecting || didAutoFocusRef.current) return;
+        focusFirstInput();
+        observer.disconnect();
+      },
+      { threshold: 0.55 }
+    );
+
+    observer.observe(formRef.current);
+    return () => observer.disconnect();
+  }, [autoFocusFirstInput]);
 
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -91,6 +128,7 @@ export function LeadForm({
 
   return (
     <form
+      ref={formRef}
       onSubmit={onSubmit}
       data-form-id={formId}
       data-analytics-section={source}
@@ -104,7 +142,7 @@ export function LeadForm({
 
       <div className="mt-5 grid gap-3">
         <div className="grid gap-3 sm:grid-cols-2">
-          <input name="name" required className={inputClass} placeholder="Name" maxLength={120} autoComplete="name" />
+          <input ref={firstInputRef} name="name" required className={inputClass} placeholder="Name" maxLength={120} autoComplete="name" />
           <input name="company" required className={inputClass} placeholder="Company" maxLength={140} autoComplete="organization" />
         </div>
         <div className="grid gap-3 sm:grid-cols-2">
