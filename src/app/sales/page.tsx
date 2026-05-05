@@ -32,12 +32,12 @@ export const metadata: Metadata = {
 };
 
 const painPoints = [
-  "Your team waits too long for help.",
-  "IT issues interrupt sales, service, and operations.",
-  "Nobody clearly owns security, backups, or devices.",
-  "You only hear from IT when something breaks.",
-  "Costs feel unpredictable because everything is reactive.",
-  "Your business is growing, but your support process is not.",
+  "Your team waits on tickets instead of working.",
+  "Small issues interrupt sales, service, and operations.",
+  "Security, backups, and devices have no clear owner.",
+  "IT only shows up after something breaks.",
+  "Costs keep increasing without warning.",
+  "Growth adds users faster than support can keep up.",
 ] as const;
 
 const trustBadges = [
@@ -58,10 +58,10 @@ const serviceBullets = [
 
 const consequences = [
   "Small IT issues turn into downtime.",
-  "Your team keeps waiting for support.",
-  "Security risks go unnoticed.",
-  "Costs stay unpredictable.",
-  "You lose time focusing on IT instead of your business.",
+  "Your team keeps waiting instead of working.",
+  "Security risks stay hidden until they hurt.",
+  "Costs keep increasing without warning.",
+  "You spend owner time chasing IT instead of growth.",
 ] as const;
 
 const proofCards = [
@@ -106,6 +106,12 @@ const faqs = [
     a: "It adds accountability when IT, cameras, access, and security-related work overlap.",
   },
 ] as const;
+
+const primaryCtaClass =
+  "inline-flex items-center justify-center rounded-2xl bg-cyan-500 px-5 py-3 text-sm font-semibold text-white shadow-[0_0_28px_rgba(34,211,238,0.24)] transition duration-300 hover:-translate-y-0.5 hover:bg-cyan-400 hover:shadow-[0_0_42px_rgba(34,211,238,0.34)]";
+
+const secondaryCtaClass =
+  "inline-flex items-center justify-center gap-2 rounded-2xl border border-white/18 px-5 py-3 text-sm font-semibold text-white/90 transition duration-300 hover:-translate-y-0.5 hover:bg-white/7";
 
 export default function SalesPage() {
   return (
@@ -157,16 +163,16 @@ export default function SalesPage() {
               </div>
 
               <div className="mt-7 flex flex-wrap gap-3">
-                <a href={SITE.phoneHref} data-analytics-id="sales-hero-phone" className="inline-flex rounded-2xl bg-cyan-500 px-5 py-3 text-sm font-semibold text-white hover:bg-cyan-400">
+                <a href={SITE.phoneHref} data-analytics-id="sales-hero-phone" className={primaryCtaClass}>
                   Talk to a Real Technician
                 </a>
-                <Link href="#quick-plan" data-analytics-id="sales-hero-free-plan" className="inline-flex items-center gap-2 rounded-2xl border border-white/18 px-5 py-3 text-sm font-semibold text-white/90 hover:bg-white/7">
+                <Link href="#quick-plan" data-analytics-id="sales-hero-free-plan" className={secondaryCtaClass}>
                   Get My Free IT Plan
                   <ArrowRight className="h-4 w-4" aria-hidden="true" />
                 </Link>
               </div>
-              <div className="mt-4 grid max-w-2xl gap-2 text-xs text-white/62 sm:grid-cols-2">
-                {["Free consultation", "No pressure", "Real technician, not sales", "Response within ~15-30 minutes"].map((item) => (
+              <div className="mt-4 grid max-w-2xl gap-2 text-xs text-white/66 sm:grid-cols-2">
+                {["Know what to fix first in under 30 minutes", "Real technician, not sales", "Free consultation", "Response within ~15-30 minutes"].map((item) => (
                   <div key={item} className="flex items-center gap-2">
                     <CheckCircle2 className="h-3.5 w-3.5 shrink-0 text-cyan-200" aria-hidden="true" />
                     <span>{item}</span>
@@ -179,9 +185,9 @@ export default function SalesPage() {
               formId="msp-hero-form"
               source="sales-hero"
               title="Get clarity on your IT in the next 15 minutes"
-              description="We will review your situation and tell you exactly what to fix first."
+              description="Tell us the basics. We will tell you what to fix first."
               submitLabel="Talk to a Real Technician"
-              microcopy="No pressure. Real technician follow-up. Usually within 15-30 minutes."
+              microcopy="No pressure. Clear next step, fast. Usually within 15-30 minutes."
               className="md:sticky md:top-28"
             />
           </section>
@@ -203,11 +209,17 @@ export default function SalesPage() {
               </div>
               <div className="mt-8 grid gap-3 md:grid-cols-2 lg:grid-cols-3">
                 {painPoints.map((point) => (
-                  <div key={point} className="flex gap-3 rounded-2xl border border-white/10 bg-slate-950/36 p-5 text-white/74">
+                  <div key={point} className="flex gap-3 rounded-2xl border border-white/10 bg-slate-950/36 p-5 text-white/74 transition duration-300 hover:-translate-y-0.5 hover:border-amber-200/22 hover:bg-white/[0.055]">
                     <AlertTriangle className="mt-0.5 h-5 w-5 shrink-0 text-amber-200" aria-hidden="true" />
                     <span>{point}</span>
                   </div>
                 ))}
+              </div>
+              <div className="mt-7 flex flex-wrap items-center gap-3 rounded-3xl border border-white/10 bg-white/5 p-4">
+                <p className="max-w-2xl text-sm font-semibold text-white/86">Small issues don&apos;t stay small. Get a clear next step before it spreads.</p>
+                <Link href="#quick-plan" data-analytics-id="sales-pain-cta" className={primaryCtaClass}>
+                  Talk to a Real Technician
+                </Link>
               </div>
             </div>
           </section>
@@ -221,7 +233,7 @@ export default function SalesPage() {
               </div>
               <div className="mt-8 grid gap-3 md:grid-cols-5">
                 {consequences.map((item) => (
-                  <div key={item} className="rounded-2xl border border-red-300/18 bg-red-950/18 p-4 text-sm leading-relaxed text-white/76">
+                  <div key={item} className="rounded-2xl border border-red-300/18 bg-red-950/18 p-4 text-sm font-medium leading-relaxed text-white/78 transition duration-300 hover:-translate-y-0.5 hover:border-red-200/28 hover:bg-red-950/25">
                     <AlertTriangle className="mb-3 h-5 w-5 text-red-200" aria-hidden="true" />
                     {item}
                   </div>
@@ -234,7 +246,7 @@ export default function SalesPage() {
                 <Link
                   href="#quick-plan"
                   data-analytics-id="sales-consequence-cta"
-                  className="inline-flex rounded-2xl bg-cyan-500 px-5 py-3 text-sm font-semibold text-white hover:bg-cyan-400"
+                  className={primaryCtaClass}
                 >
                   Talk to a Real Technician
                 </Link>
@@ -249,7 +261,7 @@ export default function SalesPage() {
                 This is fixable. And it doesn&apos;t require a full IT overhaul.
               </h2>
               <p className="mt-4 max-w-3xl leading-relaxed text-white/72">
-                Lone Star GlobalTech gives you a clear support path, fast help from real people, and practical next steps your team can actually use.
+                Clear next step. Fast follow-up. No full overhaul just to get started.
               </p>
             </div>
           </section>
@@ -269,7 +281,7 @@ export default function SalesPage() {
               </h2>
               <div className="mt-7 grid gap-3 sm:grid-cols-2">
                 {serviceBullets.map((item) => (
-                  <div key={item} className="flex items-center gap-3 rounded-2xl border border-white/10 bg-white/5 px-4 py-4 text-sm font-semibold text-white/80">
+                  <div key={item} className="flex items-center gap-3 rounded-2xl border border-white/10 bg-white/5 px-4 py-4 text-sm font-semibold text-white/80 transition duration-300 hover:-translate-y-0.5 hover:border-cyan-300/24 hover:bg-white/[0.07]">
                     <CheckCircle2 className="h-5 w-5 shrink-0 text-cyan-200" aria-hidden="true" />
                     {item}
                   </div>
@@ -316,16 +328,16 @@ export default function SalesPage() {
               <div>
                 <h2 className="text-3xl font-semibold tracking-[0.01em]">Want clarity before the next IT issue hits?</h2>
                 <p className="mt-3 leading-relaxed text-white/70">
-                  Send the basics. We will review your situation and tell you what to fix first.
+                  Know what to fix first in under 30 minutes.
                 </p>
               </div>
               <LeadForm
                 formId="msp-mid-form"
                 source="sales-mid"
                 title="Talk to a real technician about your IT setup"
-                description="We will review your situation and tell you exactly what to fix first."
+                description="Send the basics. We will tell you what to fix first."
                 submitLabel="Talk to a Real Technician"
-                microcopy="No pressure. Real technician follow-up. Usually within 15-30 minutes."
+                microcopy="No pressure. Clear next step, fast. Usually within 15-30 minutes."
                 showMessage
               />
             </div>
@@ -370,6 +382,9 @@ export default function SalesPage() {
           <section data-analytics-section="msp-final-form" className="mx-auto grid max-w-6xl gap-8 px-4 py-16 md:grid-cols-[0.9fr_1.1fr] md:items-start">
             <div>
               <p className="text-xs font-semibold uppercase tracking-[0.22em] text-cyan-100/78">Final step</p>
+              <div className="mb-5 rounded-2xl border border-amber-200/18 bg-amber-950/16 p-4 text-sm font-semibold text-amber-50/88">
+                At this point, you already know if this is happening to your team.
+              </div>
               <h2 className="mt-3 text-3xl font-semibold tracking-[0.01em] md:text-4xl">Let&apos;s fix this before it slows your business down even more.</h2>
               <p className="mt-4 leading-relaxed text-white/70">
                 You don&apos;t need a full overhaul. You just need the right next step.
@@ -382,9 +397,9 @@ export default function SalesPage() {
               formId="msp-final-form"
               source="sales-final"
               title="Talk to a Real Technician"
-              description="We will review your situation and tell you exactly what to fix first."
+              description="Send the basics. We will tell you what to fix first."
               submitLabel="Talk to a Real Technician"
-              microcopy="No pressure. Real technician follow-up. Usually within 15-30 minutes."
+              microcopy="No pressure. Clear next step, fast. Usually within 15-30 minutes."
               showMessage
             />
           </section>
@@ -393,7 +408,7 @@ export default function SalesPage() {
         <Link
           href="#quick-plan"
           data-analytics-id="sales-sticky-cta"
-          className="fixed bottom-4 left-4 right-4 z-40 inline-flex items-center justify-center rounded-2xl bg-cyan-500 px-5 py-3 text-sm font-semibold text-white shadow-[0_18px_48px_rgba(0,0,0,0.45)] hover:bg-cyan-400 md:left-auto md:right-6 md:w-auto"
+          className="fixed bottom-4 left-4 right-4 z-40 inline-flex items-center justify-center rounded-2xl bg-cyan-500 px-5 py-3 text-sm font-semibold text-white shadow-[0_18px_48px_rgba(0,0,0,0.45),0_0_34px_rgba(34,211,238,0.24)] transition duration-300 hover:-translate-y-0.5 hover:bg-cyan-400 md:left-auto md:right-6 md:w-auto"
         >
           Talk to a Real Technician
         </Link>
