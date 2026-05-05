@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import { AlertTriangle, ArrowRight, CheckCircle2, Clock, Cloud, HelpCircle, LifeBuoy, LockKeyhole, MonitorCog, Network, ShieldCheck, Users } from "lucide-react";
+import { AlertTriangle, ArrowRight, CheckCircle2, Clock, HelpCircle, ShieldCheck } from "lucide-react";
 import { DpsTrustBadge, PageBackdrop, SiteFooter, SiteHeader } from "@/src/components/site/conversion-shell";
 import { LeadForm } from "@/src/components/site/lead-form";
 import { SITE } from "@/src/lib/site-config";
@@ -40,20 +40,20 @@ const painPoints = [
   "Your business is growing, but your support process is not.",
 ] as const;
 
-const benefits = [
-  "Real technician follow-up",
-  "Predictable monthly support",
-  "Proactive monitoring and maintenance",
-  "Security-aware IT guidance",
-  "Local, relationship-based service",
-  "A support path your team can actually use",
-] as const;
-
 const trustBadges = [
   { title: "Texas DPS Licensed", text: "Security-related accountability" },
   { title: "Real Technicians", text: "No faceless ticket maze" },
   { title: "Local Relationship Support", text: "Built for long-term trust" },
   { title: "Security-Aware IT", text: "Devices, networks, users, and risk" },
+] as const;
+
+const serviceBullets = [
+  "Fast helpdesk support",
+  "Predictable monthly IT",
+  "Security-aware guidance",
+  "Clear documentation",
+  "Real technician follow-up",
+  "No vendor chaos",
 ] as const;
 
 const consequences = [
@@ -88,31 +88,22 @@ const proofCards = [
   },
 ] as const;
 
-const services = [
-  { icon: LifeBuoy, title: "Managed IT Support", text: "Helpdesk, troubleshooting, onboarding, and practical day-to-day support." },
-  { icon: Users, title: "Helpdesk Support", text: "A clear place for employees to ask for help without chasing random vendors." },
-  { icon: Network, title: "Network Management", text: "Wi-Fi, firewalls, switches, documentation, and stability checks." },
-  { icon: LockKeyhole, title: "Cybersecurity Basics", text: "MFA, endpoint protection, policies, alert review, and safer defaults." },
-  { icon: Cloud, title: "Cloud & Email Support", text: "Microsoft 365, Google Workspace, email access, licensing, and user changes." },
-  { icon: MonitorCog, title: "Device & User Management", text: "Patching, device standards, account changes, and employee transitions." },
-] as const;
-
 const faqs = [
   {
     q: "How quickly can we get started?",
-    a: "Most small teams can start with a discovery call and basic assessment right away. Onboarding timing depends on users, devices, locations, and current issues.",
+    a: "Start with the form. We usually reply during business hours with the next step and what we need to review.",
   },
   {
     q: "Do we need to replace our current tools?",
-    a: "Not automatically. We review what you already use, keep what works, and recommend changes only where they reduce risk or improve support.",
+    a: "No. We keep what works and only recommend changes that reduce risk or make support easier.",
   },
   {
     q: "Is this only for companies with 50+ employees?",
-    a: "No. We are ready to support small and medium businesses, including teams around 5-25 users that need reliable IT without hiring internally.",
+    a: "No. We support small and medium teams that need reliable IT without hiring internally.",
   },
   {
     q: "What does the Texas DPS license mean for MSP customers?",
-    a: "It means Lone Star GlobalTech is licensed by Texas DPS for security-related services. For clients, that adds trust and accountability when IT, cameras, access, and security overlap.",
+    a: "It adds accountability when IT, cameras, access, and security-related work overlap.",
   },
 ] as const;
 
@@ -133,7 +124,10 @@ export default function SalesPage() {
               <h1 className="mt-5 max-w-3xl text-4xl font-semibold leading-[1.04] tracking-[0.01em] md:text-6xl">
                 Your IT issues are costing you time, money, and team productivity.
               </h1>
-              <p className="mt-5 max-w-2xl text-lg leading-relaxed text-white/74">
+              <p className="mt-4 text-2xl font-semibold tracking-[0.01em] text-white/90">
+                And most companies wait too long to fix it.
+              </p>
+              <p className="mt-4 max-w-2xl text-lg leading-relaxed text-white/74">
                 Talk to a real technician today and get a simple, practical plan to fix it fast.
               </p>
 
@@ -171,7 +165,7 @@ export default function SalesPage() {
               title="Get a real IT plan in 15 minutes"
               description="We will review your situation and tell you exactly what to fix first."
               submitLabel="Talk to a Real Technician"
-              microcopy="No pressure. We use this to follow up with a practical next step."
+              microcopy="No pressure. Real technician follow-up. Usually within 15-30 minutes."
               className="md:sticky md:top-28"
             />
           </section>
@@ -235,7 +229,7 @@ export default function SalesPage() {
             </div>
           </section>
 
-          <section data-analytics-section="msp-solution" className="mx-auto grid max-w-6xl gap-8 px-4 py-16 md:grid-cols-[0.95fr_1.05fr] md:items-center">
+          <section id="services" data-analytics-section="msp-services" className="mx-auto grid max-w-6xl gap-8 px-4 py-16 md:grid-cols-[0.9fr_1.1fr] md:items-center">
             <div className="relative min-h-[360px] overflow-hidden rounded-3xl border border-white/10 bg-slate-950/45">
               <Image src="/msp/support-tech.jpg" alt="Technician providing managed IT support" fill className="object-cover opacity-76" sizes="(max-width: 768px) 100vw, 45vw" />
               <div className="absolute inset-0 bg-[linear-gradient(to_top,rgba(3,7,18,0.82),rgba(3,7,18,0.12))]" />
@@ -245,39 +239,18 @@ export default function SalesPage() {
               </div>
             </div>
             <div>
-              <p className="text-xs font-semibold uppercase tracking-[0.22em] text-cyan-100/78">Managed IT services</p>
-              <h2 className="mt-3 text-3xl font-semibold tracking-[0.01em] md:text-4xl">We keep your technology supported, documented, and easier to trust.</h2>
-              <p className="mt-4 leading-relaxed text-white/70">
-                Our MSP service gives your business a clear support path: helpdesk, monitoring, security basics, network guidance,
-                cloud/email support, device management, and backup/recovery planning.
-              </p>
-              <div className="mt-6 grid gap-2 sm:grid-cols-2">
-                {benefits.map((benefit) => (
-                  <div key={benefit} className="flex gap-2 rounded-2xl border border-white/10 bg-white/5 px-3 py-3 text-sm text-white/74">
-                    <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-cyan-200" aria-hidden="true" />
-                    <span>{benefit}</span>
+              <p className="text-xs font-semibold uppercase tracking-[0.22em] text-cyan-100/78">What you get</p>
+              <h2 className="mt-3 text-3xl font-semibold tracking-[0.01em] md:text-4xl">
+                Everything you need to stop dealing with IT problems:
+              </h2>
+              <div className="mt-7 grid gap-3 sm:grid-cols-2">
+                {serviceBullets.map((item) => (
+                  <div key={item} className="flex items-center gap-3 rounded-2xl border border-white/10 bg-white/5 px-4 py-4 text-sm font-semibold text-white/80">
+                    <CheckCircle2 className="h-5 w-5 shrink-0 text-cyan-200" aria-hidden="true" />
+                    {item}
                   </div>
                 ))}
               </div>
-            </div>
-          </section>
-
-          <section id="services" data-analytics-section="msp-services" className="mx-auto max-w-6xl px-4 py-16">
-            <div className="max-w-3xl">
-              <p className="text-xs font-semibold uppercase tracking-[0.22em] text-cyan-100/78">Services included or available</p>
-              <h2 className="mt-3 text-3xl font-semibold tracking-[0.01em] md:text-4xl">Everything your business needs for a stronger IT foundation.</h2>
-            </div>
-            <div className="mt-8 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-              {services.map((service) => {
-                const Icon = service.icon;
-                return (
-                  <article key={service.title} className="rounded-3xl border border-white/10 bg-white/5 p-6">
-                    <Icon className="h-7 w-7 text-cyan-200" aria-hidden="true" />
-                    <h3 className="mt-4 text-xl font-semibold">{service.title}</h3>
-                    <p className="mt-2 leading-relaxed text-white/67">{service.text}</p>
-                  </article>
-                );
-              })}
             </div>
           </section>
 
@@ -291,9 +264,18 @@ export default function SalesPage() {
             </div>
             <div className="mt-8 grid gap-4 md:grid-cols-3">
               {proofCards.map((card) => (
-                <article key={card.author} className="overflow-hidden rounded-3xl border border-white/10 bg-white/5">
+                <article
+                  key={card.author}
+                  className="group overflow-hidden rounded-3xl border border-white/10 bg-white/5 transition duration-300 hover:-translate-y-1 hover:border-cyan-300/28 hover:shadow-[0_24px_70px_rgba(34,211,238,0.12)]"
+                >
                   <div className="relative aspect-[4/3] bg-slate-950/50">
-                    <Image src={card.image} alt={`${card.label} project image`} fill className="object-cover" sizes="(max-width: 768px) 100vw, 33vw" />
+                    <Image
+                      src={card.image}
+                      alt={`${card.label} project image`}
+                      fill
+                      className="object-cover transition duration-500 group-hover:scale-[1.03]"
+                      sizes="(max-width: 768px) 100vw, 33vw"
+                    />
                     <div className="absolute inset-0 bg-[linear-gradient(to_top,rgba(3,7,18,0.78),transparent_60%)]" />
                     <div className="absolute bottom-3 left-3 rounded-full border border-white/12 bg-black/38 px-3 py-1.5 text-xs text-white/78 backdrop-blur">
                       {card.label}
@@ -322,7 +304,7 @@ export default function SalesPage() {
                 title="Talk to a real technician about your IT setup"
                 description="We will review your situation and tell you exactly what to fix first."
                 submitLabel="Talk to a Real Technician"
-                microcopy="No pressure. We use this to follow up with a practical next step."
+                microcopy="No pressure. Real technician follow-up. Usually within 15-30 minutes."
                 showMessage
               />
             </div>
@@ -385,7 +367,7 @@ export default function SalesPage() {
               title="Talk to a Real Technician"
               description="We will review your situation and tell you exactly what to fix first."
               submitLabel="Talk to a Real Technician"
-              microcopy="No pressure. We use this to follow up with a practical next step."
+              microcopy="No pressure. Real technician follow-up. Usually within 15-30 minutes."
               showMessage
             />
           </section>
