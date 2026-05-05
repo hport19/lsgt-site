@@ -62,7 +62,7 @@ export function BrandHeader({
             </nav>
 
             <div className="flex items-center gap-2">
-              <CtaLink href="/msp#quick-plan" variant="primary" className="px-4 py-2 text-xs md:text-sm lg:px-6 lg:py-2.5 lg:text-sm">
+              <CtaLink href="/sales" variant="primary" className="px-4 py-2 text-xs md:text-sm lg:px-6 lg:py-2.5 lg:text-sm">
                 {CTA.quickPlan}
               </CtaLink>
               <CtaLink href={SITE.phoneHref} variant="ghost" className="px-3 py-2 text-xs md:text-sm lg:px-4 lg:py-2.5">

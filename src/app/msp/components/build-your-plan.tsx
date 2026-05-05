@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { trackAnalyticsEvent } from "@/src/components/analytics/analytics-provider";
 
 export type BuilderPlan = {
   id: "essential" | "professional" | "enterprise";
@@ -239,8 +240,14 @@ export default function BuildYourPlan({ plans, addOns }: BuildYourPlanProps) {
         throw new Error(data.error || `Request failed (${res.status})`);
       }
 
+      trackAnalyticsEvent({
+        eventType: "form_submit",
+        elementId: "msp-plan-builder-form",
+        section: "msp-plan-builder",
+        metadata: { plan: selectedPlan.id, estimatedMonthly: totalMonthly },
+      });
       setSendOk("Estimate sent. Redirecting...");
-      window.location.href = "/thank-you?type=msp";
+      window.location.assign("/thank-you?type=msp");
     } catch (error: unknown) {
       const msg = error instanceof Error ? error.message : "Unable to send estimate right now.";
       setSendError(msg);
@@ -442,7 +449,12 @@ export default function BuildYourPlan({ plans, addOns }: BuildYourPlanProps) {
           </div>
 
           {showSendForm ? (
-            <form onSubmit={sendEstimateRequest} className="mt-3 space-y-2 rounded-xl border border-white/15 bg-black/25 p-3">
+            <form
+              onSubmit={sendEstimateRequest}
+              data-form-id="msp-plan-builder-form"
+              data-analytics-section="msp-plan-builder"
+              className="mt-3 space-y-2 rounded-xl border border-white/15 bg-black/25 p-3"
+            >
               <p className="text-xs text-white/70">We&apos;ll send this estimate to our team and follow up with exact pricing + rollout steps.</p>
 
               <div className="grid gap-2">

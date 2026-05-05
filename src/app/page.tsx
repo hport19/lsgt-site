@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import HomeConversionPage from "./_components/home-conversion-page";
+import HomePageClient from "./_components/home-page-client";
 
 export const metadata: Metadata = {
   title: "Friendly Managed IT Support for Small Businesses",
@@ -34,5 +34,5 @@ export const metadata: Metadata = {
 };
 
 export default function Page() {
-  return <HomeConversionPage />;
+  return <HomePageClient />;
 }
