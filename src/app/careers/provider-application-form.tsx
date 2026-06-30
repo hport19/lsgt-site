@@ -3,6 +3,7 @@
 import { useRef, useState } from "react";
 import { CheckCircle2, FileText, UploadCloud } from "lucide-react";
 import { trackAnalyticsEvent } from "@/src/components/analytics/analytics-provider";
+import { formStyles } from "@/src/components/site/ui-system";
 
 const MAX_RESUME_BYTES = 10 * 1024 * 1024;
 const allowedResumeTypes = new Set([
@@ -10,9 +11,6 @@ const allowedResumeTypes = new Set([
   "application/msword",
   "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
 ]);
-
-const inputClass =
-  "w-full rounded-xl border border-white/14 bg-black/24 px-3.5 py-3 text-sm text-white outline-none placeholder:text-white/38 focus:border-cyan-300/70 focus:ring-4 focus:ring-cyan-500/15";
 
 function isAllowedResume(file: File) {
   return allowedResumeTypes.has(file.type) || /\.(pdf|doc|docx)$/i.test(file.name);
@@ -158,7 +156,7 @@ export default function ProviderApplicationForm() {
       onSubmit={onSubmit}
       data-form-id="careers-application-form"
       data-analytics-section="careers-application"
-      className="rounded-3xl border border-white/12 bg-white/6 p-5 shadow-[0_24px_70px_rgba(0,0,0,0.32)] backdrop-blur md:p-6"
+      className={formStyles.panel}
     >
       <input type="hidden" name="type" value="provider" />
       <input name="website" autoComplete="off" tabIndex={-1} className="hidden" aria-hidden="true" />
@@ -172,30 +170,30 @@ export default function ProviderApplicationForm() {
 
       <div className="mt-6 grid gap-4">
         <div className="grid gap-4 sm:grid-cols-2">
-          <label className="grid gap-2 text-sm text-white/72">
+          <label className={formStyles.label}>
             First name
-            <input name="firstName" required className={inputClass} autoComplete="given-name" maxLength={80} />
+            <input name="firstName" required className={formStyles.input} autoComplete="given-name" maxLength={80} />
           </label>
-          <label className="grid gap-2 text-sm text-white/72">
+          <label className={formStyles.label}>
             Last name
-            <input name="lastName" required className={inputClass} autoComplete="family-name" maxLength={80} />
+            <input name="lastName" required className={formStyles.input} autoComplete="family-name" maxLength={80} />
           </label>
         </div>
 
         <div className="grid gap-4 sm:grid-cols-2">
-          <label className="grid gap-2 text-sm text-white/72">
+          <label className={formStyles.label}>
             Email
-            <input name="email" required type="email" className={inputClass} autoComplete="email" maxLength={180} />
+            <input name="email" required type="email" className={formStyles.input} autoComplete="email" maxLength={180} />
           </label>
-          <label className="grid gap-2 text-sm text-white/72">
+          <label className={formStyles.label}>
             Phone
-            <input name="phone" required type="tel" className={inputClass} autoComplete="tel" maxLength={80} />
+            <input name="phone" required type="tel" className={formStyles.input} autoComplete="tel" maxLength={80} />
           </label>
         </div>
 
-        <label className="grid gap-2 text-sm text-white/72">
+        <label className={formStyles.label}>
           Position applying for
-          <select name="positionApplyingFor" required className={inputClass} defaultValue="">
+          <select name="positionApplyingFor" required className={formStyles.input} defaultValue="">
             <option value="" disabled>
               Select one
             </option>
@@ -205,12 +203,12 @@ export default function ProviderApplicationForm() {
           </select>
         </label>
 
-        <label className="grid gap-2 text-sm text-white/72">
+        <label className={formStyles.label}>
           Experience
           <textarea
             name="experience"
             required
-            className={`${inputClass} min-h-[140px] resize-y`}
+            className={`${formStyles.input} min-h-[140px] resize-y`}
             placeholder="Tell us what you've done, what you're learning, and how you like to work."
             maxLength={2400}
           />
@@ -253,13 +251,13 @@ export default function ProviderApplicationForm() {
         </label>
       </div>
 
-      {error ? <div className="mt-4 rounded-xl border border-red-400/30 bg-red-500/10 px-3 py-2 text-sm text-red-100">{error}</div> : null}
+      {error ? <div className={`mt-4 ${formStyles.error}`}>{error}</div> : null}
 
       <button
         type="submit"
         disabled={loading}
         data-analytics-id="careers-application-submit"
-        className="mt-5 inline-flex w-full items-center justify-center rounded-xl bg-cyan-500 px-4 py-3 text-sm font-semibold text-white transition hover:bg-cyan-400 disabled:cursor-not-allowed disabled:opacity-60"
+        className={`mt-5 ${formStyles.submit}`}
       >
         {loading ? "Submitting..." : "Submit application"}
       </button>

@@ -14,8 +14,8 @@ export default function TermsAndConditionsPage() {
           subtitle="Legal Terms and Service Conditions"
           nav={[
             { label: "Home", href: "/" },
-            { label: "Services", href: "/#services" },
-            { label: "Why Us", href: "/#why-us" },
+            { label: "Services", href: "/#solutions" },
+            { label: "Why Us", href: "/#why" },
             { label: "Managed IT", href: "/msp" },
             { label: "Careers", href: "/careers" },
             { label: "Terms", href: "/terms-and-conditions", active: true },

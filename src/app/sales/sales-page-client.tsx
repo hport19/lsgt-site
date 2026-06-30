@@ -228,7 +228,7 @@ export default function SalesPageClient() {
     <div className="relative min-h-screen text-neutral-100">
       <PageBackdrop />
       <div className="relative z-10">
-        <SiteHeader active="msp" />
+        <SiteHeader active="sales" />
 
         <main>
           <section className="border-y border-cyan-300/14 bg-cyan-950/24" data-analytics-section="sales-urgency-strip" data-reveal>

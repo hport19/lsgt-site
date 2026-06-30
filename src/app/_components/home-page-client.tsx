@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { trackAnalyticsEvent } from "@/src/components/analytics/analytics-provider";
+import { SiteFooter, SiteHeader } from "@/src/components/site/conversion-shell";
 
 type TicketType = "support" | "project" | "msp";
 
@@ -858,7 +859,6 @@ export default function Page() {
   const [nameLen, setNameLen] = useState(0);
   const [phoneLen, setPhoneLen] = useState(0);
   const [messageLen, setMessageLen] = useState(0);
-  const [mobileNavOpen, setMobileNavOpen] = useState(false);
 
   // Accordion state for Projects
   const [openProject, setOpenProject] = useState<string | null>(null);
@@ -900,12 +900,12 @@ export default function Page() {
     window.setTimeout(() => focusTicketForm(), 300);
   }
 
+  // video-first hero media (falls back if missing)
+  const [heroMediaMode, setHeroMediaMode] = useState<"video" | "image">("video");
+
   function goTop() {
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
-
-  // video-first hero media (falls back if missing)
-  const [heroMediaMode, setHeroMediaMode] = useState<"video" | "image">("video");
 
   function onRequestTypeChange(type: TicketType) {
     if (type === "msp") {
@@ -998,174 +998,7 @@ export default function Page() {
       </div>
 
       <div className="relative z-10">
-        {/* Header */}
-        <header className="sticky top-0 z-50 border-b border-white/10 bg-neutral-950/55 backdrop-blur">
-          <div className="mx-auto max-w-6xl px-4 py-3 lg:max-w-[92rem] lg:py-4">
-            <div className="ui-nav-shell flex items-center justify-between gap-3 rounded-2xl px-3 py-2 lg:px-5 lg:py-3">
-            <div className="flex items-center gap-2.5">
-              <button
-                type="button"
-                onClick={() => setMobileNavOpen((v) => !v)}
-                className="inline-flex h-9 w-9 items-center justify-center rounded-xl border border-white/15 text-white/80 hover:bg-white/5 lg:hidden"
-                aria-label="Toggle navigation"
-                aria-expanded={mobileNavOpen}
-              >
-                <span className="text-lg">{mobileNavOpen ? "×" : "≡"}</span>
-              </button>
-              <button
-                type="button"
-                onClick={goTop}
-                className="flex items-center gap-3 text-left focus:outline-none"
-                aria-label="Go to top"
-              >
-                <div className="relative h-10 w-10 overflow-hidden rounded-xl border border-white/10 bg-white/5 lg:h-9 lg:w-9">
-                  <Image src="/isotipo.png" alt="GlobalTech" fill className="object-contain p-0 md:p-1" priority />
-                </div>
-                <div className="leading-tight">
-                  <div className="font-semibold tracking-tight">GlobalTech</div>
-                  <div className="hidden text-xs text-white/60 xl:block">
-                    DBA of Lone Star GlobalTech • Premium MSP • Security • Infrastructure
-                  </div>
-                </div>
-              </button>
-            </div>
-
-            <nav className="hidden items-center gap-2 text-sm text-white/70 lg:flex xl:gap-3">
-              <NavBtn onClick={() => window.location.assign("/msp")}>Managed IT</NavBtn>
-              <NavBtn onClick={() => scrollToId("solutions")}>Solutions</NavBtn>
-              <NavBtn onClick={() => scrollToId("why")}>Why GlobalTech</NavBtn>
-              <NavBtn onClick={() => scrollToId("projects")}>Projects</NavBtn>
-              <NavBtn onClick={() => window.location.assign("/careers")}>Careers</NavBtn>
-              <NavBtn onClick={() => scrollToId("contact")}>Contact</NavBtn>
-            </nav>
-
-            <div className="flex items-center gap-2">
-              <button
-                type="button"
-                onClick={() => goToTicketForm("msp")}
-                className="inline-flex rounded-xl border border-cyan-300/35 bg-cyan-500 px-3 py-1.5 text-xs font-semibold text-white shadow-[0_12px_34px_rgba(34,211,238,0.22)] hover:bg-cyan-400 lg:px-6 lg:py-2.5 lg:text-sm"
-              >
-                Get a Quick IT Plan
-              </button>
-              <button
-                type="button"
-                onClick={() => (window.location.assign("tel:8064849040"))}
-                className="inline-flex rounded-xl border border-white/15 bg-white/6 px-3 py-1.5 text-xs font-semibold text-white/92 hover:bg-white/10 lg:px-4 lg:py-2.5 lg:text-sm"
-              >
-                Call
-              </button>
-              <button
-                type="button"
-                onClick={() => (window.location.assign("mailto:info@lonestarglobaltech.com"))}
-                className="inline-flex rounded-xl border border-white/15 bg-white/6 px-3 py-1.5 text-xs font-semibold text-white/92 hover:bg-white/10 lg:px-4 lg:py-2.5 lg:text-sm"
-              >
-                Email
-              </button>
-            </div>
-          </div>
-          </div>
-
-          <div
-            className={`lg:hidden overflow-hidden border-t border-white/10 px-4 transition-all duration-300 ${
-              mobileNavOpen ? "max-h-64 py-3 opacity-100" : "max-h-0 py-0 opacity-0"
-            }`}
-          >
-            <div className="grid gap-2 text-sm text-white/80">
-              <button
-                type="button"
-                onClick={() => {
-                  setMobileNavOpen(false);
-                  goToTicketForm("msp");
-                }}
-                className="rounded-xl border border-cyan-300/35 bg-cyan-500 px-4 py-2 text-left font-semibold text-white"
-              >
-                Schedule a FREE Assessment
-              </button>
-              <button
-                type="button"
-                onClick={() => {
-                  setMobileNavOpen(false);
-                  window.location.assign("/msp");
-                }}
-                className="rounded-xl border border-white/10 px-4 py-2 text-left hover:bg-white/5"
-              >
-                MSP Plans
-              </button>
-              <button
-                type="button"
-                onClick={() => {
-                  setMobileNavOpen(false);
-                  scrollToId("solutions");
-                }}
-                className="rounded-xl border border-white/10 px-4 py-2 text-left hover:bg-white/5"
-              >
-                Solutions
-              </button>
-              <button
-                type="button"
-                onClick={() => {
-                  setMobileNavOpen(false);
-                  scrollToId("why");
-                }}
-                className="rounded-xl border border-white/10 px-4 py-2 text-left hover:bg-white/5"
-              >
-                Why GlobalTech
-              </button>
-              <button
-                type="button"
-                onClick={() => {
-                  setMobileNavOpen(false);
-                  scrollToId("projects");
-                }}
-                className="rounded-xl border border-white/10 px-4 py-2 text-left hover:bg-white/5"
-              >
-                Projects
-              </button>
-              <button
-                type="button"
-                onClick={() => {
-                  setMobileNavOpen(false);
-                  window.location.assign("/careers");
-                }}
-                className="rounded-xl border border-white/10 px-4 py-2 text-left hover:bg-white/5"
-              >
-                Careers
-              </button>
-              <button
-                type="button"
-                onClick={() => {
-                  setMobileNavOpen(false);
-                  scrollToId("contact");
-                }}
-                className="rounded-xl border border-white/10 px-4 py-2 text-left hover:bg-white/5"
-              >
-                Contact
-              </button>
-              <div className="mt-1 flex gap-2">
-                <button
-                  type="button"
-                  onClick={() => {
-                    setMobileNavOpen(false);
-                    window.location.assign("tel:8064849040");
-                  }}
-                  className="rounded-xl border border-white/15 bg-white/6 px-4 py-2 text-left font-semibold text-white/90"
-                >
-                  Call
-                </button>
-                <button
-                  type="button"
-                  onClick={() => {
-                    setMobileNavOpen(false);
-                    window.location.assign("mailto:info@lonestarglobaltech.com");
-                  }}
-                  className="rounded-xl border border-white/15 bg-white/6 px-4 py-2 text-left font-semibold text-white/90"
-                >
-                  Email
-                </button>
-              </div>
-            </div>
-          </div>
-        </header>
+        <SiteHeader active="home" />
 
         {/* Hero */}
         <section className="relative overflow-hidden min-h-[70vh] md:min-h-[80vh]">
@@ -2011,86 +1844,9 @@ export default function Page() {
           </div>
         </section>
 
-        <footer className="order-80 border-t border-white/10">
-          <div className="mx-auto flex max-w-6xl flex-col gap-2 px-4 py-10 text-sm text-white/60 md:flex-row md:items-center md:justify-between">
-            <button
-              type="button"
-              onClick={goTop}
-              className="text-left hover:text-white/80 focus:outline-none focus:ring-4 focus:ring-cyan-500/10 rounded-xl px-2 py-1 -mx-2"
-              aria-label="Go to top"
-            >
-              <div>
-                © {new Date().getFullYear()} GlobalTech (DBA of Lone Star GlobalTech)
-                <div className="mt-1 text-xs text-white/45">Texas Private Security License: B30867701</div>
-              </div>
-            </button>
-            <div className="flex flex-col gap-3 md:flex-row md:items-center md:gap-5">
-              <div className="flex flex-wrap gap-4">
-                <a href="/msp" className="hover:text-white" aria-label="Open MSP plans">
-                  MSP Plans
-                </a>
-                <button className="hover:text-white" type="button" onClick={() => scrollToId("solutions")}>
-                  Solutions
-                </button>
-                <button className="hover:text-white" type="button" onClick={() => scrollToId("why")}>
-                  Why GlobalTech
-                </button>
-                <button className="hover:text-white" type="button" onClick={() => scrollToId("projects")}>
-                  Projects
-                </button>
-                <a href="/careers" className="hover:text-white" aria-label="Open Careers">
-                  Careers
-                </a>
-                <button className="hover:text-white" type="button" onClick={() => scrollToId("process")}>
-                  How We Work
-                </button>
-                <button className="hover:text-white" type="button" onClick={() => scrollToId("contact")}>
-                  Contact
-                </button>
-
-                <a href="/privacy-policy" className="hover:text-white" aria-label="Open Privacy Policy">
-                  Privacy Policy
-                </a>
-                <a href="/terms-and-conditions" className="hover:text-white" aria-label="Open Terms and Conditions">
-                  Terms &amp; Conditions
-                </a>
-              </div>
-
-              <div className="flex items-center gap-2">
-                <a
-                  href="https://www.facebook.com/lonestarglobaltech"
-                  target="_blank"
-                  rel="noreferrer"
-                  className="group inline-flex items-center justify-center rounded-xl border border-white/10 bg-white/6 px-3 py-2 text-xs text-white/70 hover:bg-white/10 hover:text-white"
-                  aria-label="Open Facebook"
-                  title="Facebook"
-                >
-                  <Image src="/facebook.png" alt="Facebook" width={18} height={18} className="opacity-80 transition group-hover:opacity-100" />
-                </a>
-                <a
-                  href="https://www.linkedin.com/company/lone-star-globaltech?trk=profile-position"
-                  target="_blank"
-                  rel="noreferrer"
-                  className="group inline-flex items-center justify-center rounded-xl border border-white/10 bg-white/6 px-3 py-2 text-xs text-white/70 hover:bg-white/10 hover:text-white"
-                  aria-label="Open LinkedIn"
-                  title="LinkedIn"
-                >
-                  <Image src="/linkedin.png" alt="LinkedIn" width={18} height={18} className="opacity-80 transition group-hover:opacity-100" />
-                </a>
-                <a
-                  href="https://share.google/eBefco64FqxeL9EhM"
-                  target="_blank"
-                  rel="noreferrer"
-                  className="group inline-flex items-center justify-center rounded-xl border border-white/10 bg-white/6 px-3 py-2 text-xs text-white/70 hover:bg-white/10 hover:text-white"
-                  aria-label="Open Google Business"
-                  title="Google"
-                >
-                  <Image src="/google.png" alt="Google Business" width={18} height={18} className="opacity-80 transition group-hover:opacity-100" />
-                </a>
-              </div>
-            </div>
-          </div>
-        </footer>
+        <div className="order-80">
+          <SiteFooter />
+        </div>
         </div>
       </div>
     </div>
@@ -2123,14 +1879,6 @@ function TypeButton({
         active ? "bg-cyan-500 border-cyan-300 text-white" : "border-white/15 text-white/70 hover:bg-white/5"
       }`}
     >
-      {children}
-    </button>
-  );
-}
-
-function NavBtn({ onClick, children }: { onClick: () => void; children: React.ReactNode }) {
-  return (
-    <button type="button" onClick={onClick} className="ui-nav-link">
       {children}
     </button>
   );

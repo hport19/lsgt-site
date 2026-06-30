@@ -1,10 +1,7 @@
 import type { Metadata } from "next";
 import Image from "next/image";
-import Link from "next/link";
-import { BrandFooter } from "@/src/components/site/brand-shell";
-import { DpsTrustBadge } from "@/src/components/site/conversion-shell";
+import { DpsTrustBadge, PageBackdrop, SiteFooter, SiteHeader } from "@/src/components/site/conversion-shell";
 import { LeadForm } from "@/src/components/site/lead-form";
-import { CTA } from "@/src/lib/site-config";
 import BuildYourPlan, { type BuilderAddOn, type BuilderPlan } from "./components/build-your-plan";
 
 type PageSearchParams = {
@@ -369,67 +366,10 @@ export default async function MspPage({ searchParams }: PageProps) {
 
   return (
     <div className="relative min-h-screen text-neutral-100">
-      <div className="pointer-events-none fixed inset-0 z-0 overflow-hidden">
-        <div className="absolute inset-0 bg-[radial-gradient(1300px_760px_at_14%_8%,rgba(59,130,246,0.24),rgba(59,130,246,0.14)_34%,rgba(59,130,246,0.05)_62%,transparent_82%),radial-gradient(1100px_700px_at_86%_18%,rgba(56,189,248,0.2),rgba(56,189,248,0.1)_34%,rgba(56,189,248,0.03)_60%,transparent_80%),linear-gradient(160deg,rgba(2,10,26,0.94),rgba(2,8,23,0.98)_58%,rgba(1,7,18,1)_100%)]" />
-        <div className="absolute inset-0 lsgt-grid opacity-[0.15]" />
-        <div className="absolute inset-0 lsgt-grain opacity-[0.16]" />
-      </div>
+      <PageBackdrop />
 
       <div className="relative z-10">
-        <header className="sticky top-0 z-50 border-b border-white/10 bg-neutral-950/55 backdrop-blur">
-          <div className="mx-auto max-w-6xl px-4 py-3 lg:max-w-[92rem] lg:py-4">
-            <div className="ui-nav-shell flex items-center justify-between gap-3 rounded-2xl px-3 py-2 lg:px-5 lg:py-3">
-            <Link href="/" className="inline-flex items-center gap-3 text-white/90 hover:text-white">
-              <div className="relative h-10 w-10 overflow-hidden rounded-xl border border-white/10 bg-white/5">
-                <Image src="/isotipo.png" alt="GlobalTech logo" fill className="object-contain p-1" sizes="40px" priority />
-              </div>
-              <div className="leading-tight">
-                <div className="font-semibold tracking-tight">GlobalTech</div>
-                <div className="text-xs text-white/55">Managed IT Services</div>
-              </div>
-            </Link>
-
-            <nav className="hidden items-center gap-2 text-sm text-white/75 lg:flex xl:gap-3">
-              <a href="#plans" className="ui-nav-link">
-                Plans
-              </a>
-              <a href="#build-plan" className="ui-nav-link">
-                Assessment
-              </a>
-              <a href="#add-ons" className="ui-nav-link">
-                Add-Ons
-              </a>
-              <a href="#faq" className="ui-nav-link">
-                FAQ
-              </a>
-              <Link href="/sales" className="ui-nav-link">
-                Talk to Us
-              </Link>
-            </nav>
-
-            <div className="flex items-center gap-2">
-              <a
-                href="/sales"
-                className="inline-flex rounded-xl border border-cyan-300/35 bg-cyan-500 px-3 py-1.5 text-xs font-semibold text-white shadow-[0_12px_34px_rgba(34,211,238,0.22)] hover:bg-cyan-400 lg:px-6 lg:py-2.5 lg:text-sm"
-              >
-                {CTA.quickPlan}
-              </a>
-              <a
-                href="tel:8064849040"
-                className="inline-flex rounded-xl border border-white/15 bg-white/6 px-3 py-1.5 text-xs font-semibold text-white/90 hover:bg-white/10 lg:px-4 lg:py-2.5 lg:text-sm"
-              >
-                Call
-              </a>
-              <a
-                href="mailto:info@lonestarglobaltech.com"
-                className="inline-flex rounded-xl border border-white/15 bg-white/6 px-3 py-1.5 text-xs font-semibold text-white/90 hover:bg-white/10 lg:px-4 lg:py-2.5 lg:text-sm"
-              >
-                Email
-              </a>
-            </div>
-          </div>
-          </div>
-        </header>
+        <SiteHeader active="msp" />
 
         <main className="mx-auto max-w-6xl px-4 pb-32 pt-10 md:pb-28 md:pt-14">
           <section data-reveal className="grid gap-6 rounded-3xl border border-white/10 bg-white/5 p-6 shadow-[0_30px_90px_rgba(0,0,0,0.5)] backdrop-blur-xl md:grid-cols-[1.08fr_0.92fr] md:p-9">
@@ -793,7 +733,7 @@ export default async function MspPage({ searchParams }: PageProps) {
           </div>
         </aside>
 
-        <BrandFooter />
+        <SiteFooter />
       </div>
     </div>
   );

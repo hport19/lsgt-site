@@ -224,6 +224,9 @@ export default function CareersPage() {
               </p>
               <div className="mt-7 rounded-3xl border border-cyan-300/20 bg-cyan-950/16 p-6 text-white shadow-[0_24px_70px_rgba(0,0,0,0.24)]">
                 <ShieldCheck className="h-7 w-7 text-emerald-200" aria-hidden="true" />
+                <p className="mt-5 text-sm font-semibold uppercase tracking-[0.18em] text-cyan-100/72">
+                  We hire for character first.
+                </p>
                 <p className="mt-5 text-4xl font-semibold leading-none tracking-[0.01em] md:text-5xl">Character &gt; Experience</p>
                 <p className="mt-5 text-xl font-semibold text-white/88">Skills can be taught.</p>
                 <p className="mt-1 text-xl font-semibold text-cyan-100">Integrity cannot.</p>

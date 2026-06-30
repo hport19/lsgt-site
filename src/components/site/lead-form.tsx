@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { trackAnalyticsEvent } from "@/src/components/analytics/analytics-provider";
+import { formStyles } from "@/src/components/site/ui-system";
 
 type LeadFormProps = {
   formId: string;
@@ -15,9 +16,6 @@ type LeadFormProps = {
   autoFocusFirstInput?: boolean;
   showNextSteps?: boolean;
 };
-
-const inputClass =
-  "w-full rounded-xl border border-white/14 bg-black/24 px-3.5 py-3 text-sm text-white outline-none placeholder:text-white/38 focus:border-cyan-300/70 focus:ring-4 focus:ring-cyan-500/15";
 
 export function LeadForm({
   formId,
@@ -134,7 +132,7 @@ export function LeadForm({
       onSubmit={onSubmit}
       data-form-id={formId}
       data-analytics-section={source}
-      className={`rounded-2xl border border-white/12 bg-white/6 p-5 shadow-[0_24px_70px_rgba(0,0,0,0.32)] backdrop-blur ${className}`}
+      className={`${formStyles.panel} ${className}`}
     >
       <input name="website" autoComplete="off" tabIndex={-1} className="hidden" aria-hidden="true" />
       <div>
@@ -144,33 +142,33 @@ export function LeadForm({
 
       <div className="mt-5 grid gap-3">
         <div className="grid gap-3 sm:grid-cols-2">
-          <input ref={firstInputRef} name="name" required className={inputClass} placeholder="Name" maxLength={120} autoComplete="name" />
-          <input name="company" required className={inputClass} placeholder="Company" maxLength={140} autoComplete="organization" />
+          <input ref={firstInputRef} name="name" required className={formStyles.input} placeholder="Name" maxLength={120} autoComplete="name" />
+          <input name="company" required className={formStyles.input} placeholder="Company" maxLength={140} autoComplete="organization" />
         </div>
         <div className="grid gap-3 sm:grid-cols-2">
-          <input name="email" required className={inputClass} placeholder="Email" type="email" maxLength={180} autoComplete="email" />
-          <input name="phone" required className={inputClass} placeholder="Phone" type="tel" maxLength={80} autoComplete="tel" />
+          <input name="email" required className={formStyles.input} placeholder="Email" type="email" maxLength={180} autoComplete="email" />
+          <input name="phone" required className={formStyles.input} placeholder="Phone" type="tel" maxLength={80} autoComplete="tel" />
         </div>
         {showMessage ? (
           <textarea
             name="message"
-            className={`${inputClass} min-h-[110px] resize-y`}
+            className={`${formStyles.input} min-h-[110px] resize-y`}
             placeholder="What is the main IT issue you want help with?"
             maxLength={1200}
           />
         ) : null}
       </div>
 
-      {error ? <div className="mt-3 rounded-xl border border-red-400/30 bg-red-500/10 px-3 py-2 text-sm text-red-100">{error}</div> : null}
+      {error ? <div className={`mt-3 ${formStyles.error}`}>{error}</div> : null}
       {success ? (
-        <div className="mt-3 rounded-xl border border-emerald-400/30 bg-emerald-500/10 px-3 py-2 text-sm text-emerald-100">{success}</div>
+        <div className={`mt-3 ${formStyles.success}`}>{success}</div>
       ) : null}
 
       <button
         type="submit"
         disabled={loading}
         data-analytics-id={`${formId}-submit`}
-        className="mt-4 inline-flex w-full items-center justify-center rounded-xl bg-cyan-500 px-4 py-3 text-sm font-semibold text-white transition hover:bg-cyan-400 disabled:cursor-not-allowed disabled:opacity-60"
+        className={`mt-4 ${formStyles.submit}`}
       >
         {loading ? "Sending..." : submitLabel}
       </button>
