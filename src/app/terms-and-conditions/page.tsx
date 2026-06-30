@@ -17,7 +17,7 @@ export default function TermsAndConditionsPage() {
             { label: "Services", href: "/#services" },
             { label: "Why Us", href: "/#why-us" },
             { label: "Managed IT", href: "/msp" },
-            { label: "Providers", href: "/careers" },
+            { label: "Careers", href: "/careers" },
             { label: "Terms", href: "/terms-and-conditions", active: true },
           ]}
         />

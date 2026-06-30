@@ -14,7 +14,7 @@ const DEFAULT_NAV: NavItem[] = [
   { label: "Managed IT", href: "/msp" },
   { label: "Services", href: "/#services" },
   { label: "Why Us", href: "/#why-us" },
-  { label: "Providers", href: "/careers" },
+  { label: "Careers", href: "/careers" },
 ];
 
 export function BrandBackdrop() {
@@ -99,7 +99,7 @@ export function BrandFooter() {
                   Managed IT
                 </Link>
                 <Link href="/careers" className="hover:text-white">
-                  Providers
+                  Careers
                 </Link>
                 <Link href="/privacy-policy" className="hover:text-white">
                   Privacy Policy

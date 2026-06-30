@@ -17,7 +17,7 @@ export default function PrivacyPolicyPage() {
             { label: "Services", href: "/#services" },
             { label: "Why Us", href: "/#why-us" },
             { label: "Managed IT", href: "/msp" },
-            { label: "Providers", href: "/careers" },
+            { label: "Careers", href: "/careers" },
             { label: "Privacy", href: "/privacy-policy", active: true },
           ]}
         />

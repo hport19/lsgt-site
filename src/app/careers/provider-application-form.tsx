@@ -166,7 +166,7 @@ export default function ProviderApplicationForm() {
       <div>
         <h2 className="text-2xl font-semibold tracking-[0.01em]">Apply to GlobalTech</h2>
         <p className="mt-2 text-sm leading-relaxed text-white/68">
-          Tell us about yourself. Upload your resume. We&apos;ll review every application personally.
+          Tell us how you work, what you&apos;ve built, and where you want to grow. A real person will review it.
         </p>
       </div>
 

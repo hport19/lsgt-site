@@ -6,11 +6,9 @@ import {
   CheckCircle2,
   Headset,
   HeartHandshake,
-  MessageSquare,
   Network,
   ShieldCheck,
   Sparkles,
-  Wrench,
 } from "lucide-react";
 import { PageBackdrop, SiteFooter, SiteHeader } from "@/src/components/site/conversion-shell";
 import ProviderApplicationForm from "./provider-application-form";
@@ -24,12 +22,15 @@ export const metadata: Metadata = {
   },
 };
 
-const traits = [
-  { icon: Wrench, title: "Solve problems", text: "You move toward the issue and figure out the next practical step." },
-  { icon: MessageSquare, title: "Communicate clearly", text: "Customers should never feel lost, ignored, or talked down to." },
-  { icon: HeartHandshake, title: "Care about customers", text: "The work matters because real businesses depend on it." },
-  { icon: ShieldCheck, title: "Take ownership", text: "You finish cleanly, document well, and follow through." },
-  { icon: Sparkles, title: "Keep learning", text: "Technology changes. Good people stay curious." },
+const standards = [
+  "Show up on time",
+  "Own mistakes",
+  "Respect customers",
+  "Keep learning",
+  "Finish what you start",
+  "Leave every site better than you found it",
+  "Document your work",
+  "Communicate clearly",
 ] as const;
 
 const paths = [
@@ -37,30 +38,30 @@ const paths = [
     icon: HeartHandshake,
     title: "Relationship Builder",
     description:
-      "Build relationships with business owners, schedule appointments, follow up, and represent GlobalTech professionally.",
-    note: "Focused on trust, relationships, and opening doors, not aggressive selling.",
-    responsibilities: ["Business outreach", "Appointment setting", "Relationship building", "Follow-up", "CRM updates"],
+      "Open doors with local businesses, build trust over time, schedule conversations, follow up, and represent GlobalTech with care.",
+    note: "This is not aggressive selling. It is community networking, trust, and long-term relationships.",
+    responsibilities: ["Local business outreach", "Appointment setting", "Community networking", "Thoughtful follow-up", "CRM updates"],
   },
   {
     icon: Network,
     title: "Field Technician",
     description:
-      "Install, repair, deploy, troubleshoot, and travel to customer sites for networking, cameras, phones, low voltage, and infrastructure work.",
-    note: "Hands-on work for people who like solving real problems in the field.",
-    responsibilities: ["Network installations", "Camera systems", "Cabling", "Troubleshooting", "Hardware deployment"],
+      "Work in the field, solve real problems, build infrastructure, and help businesses run by making their technology dependable.",
+    note: "This is hands-on work with visible results: clean installs, working systems, and customers who can keep moving.",
+    responsibilities: ["Network installations", "Camera systems", "Structured cabling", "Troubleshooting", "Hardware deployment"],
   },
   {
     icon: Headset,
     title: "Technical Support Agent",
     description:
-      "Support remote users, helpdesk requests, managed IT operations, Microsoft 365, endpoint management, and customer success.",
-    note: "Calm, clear support for people who need technology to just work.",
-    responsibilities: ["Helpdesk", "Remote troubleshooting", "Microsoft 365", "Endpoint management", "Documentation"],
+      "Help customers succeed through managed IT support, remote troubleshooting, Microsoft 365, endpoint management, and clear documentation.",
+    note: "This is not call-center work. It is ownership, calm communication, and making sure people can do their work.",
+    responsibilities: ["Customer success", "Remote troubleshooting", "Microsoft 365", "Endpoint management", "Documentation"],
   },
 ] as const;
 
 const culture = [
-  "You won't disappear into a giant corporation.",
+  "No giant org chart to hide behind.",
   "You'll work directly with experienced technicians.",
   "You'll solve real business problems.",
   "You'll continue learning.",
@@ -83,11 +84,11 @@ export default function CareersPage() {
                 Build with standards
               </div>
               <h1 className="mt-5 max-w-4xl text-4xl font-semibold leading-[1.04] tracking-[0.01em] md:text-6xl">
-                Build the IT company you always wished existed.
+                Do work you&apos;re proud to put your name on.
               </h1>
               <p className="mt-5 max-w-3xl text-lg leading-relaxed text-white/74">
-                GlobalTech is a small, ambitious team building a higher standard for managed IT, field services,
-                networking, security, and customer relationships across Texas.
+                We support the networks, devices, systems, and infrastructure local businesses depend on.
+                The work is technical. The standard is personal.
               </p>
               <div className="mt-7 flex flex-wrap gap-3">
                 <Link
@@ -110,8 +111,8 @@ export default function CareersPage() {
 
             <div className="relative min-h-[380px] overflow-hidden rounded-3xl border border-white/10 bg-slate-950/45">
               <Image
-                src="/media/external/msp-ops-team.jpg"
-                alt="GlobalTech team working on business technology operations"
+                src="/media/external/network-rack.jpg"
+                alt="Professional network rack and business infrastructure work"
                 fill
                 priority
                 className="object-cover opacity-82"
@@ -119,34 +120,35 @@ export default function CareersPage() {
               />
               <div className="absolute inset-0 bg-[linear-gradient(to_top,rgba(3,7,18,0.84),rgba(3,7,18,0.14))]" />
               <div className="absolute bottom-4 left-4 right-4 rounded-2xl border border-white/12 bg-black/38 p-4 backdrop-blur">
-                <p className="text-sm font-semibold text-white">Great IT doesn&apos;t happen by accident.</p>
-                <p className="mt-1 text-sm text-white/68">Great teams build it with ownership, clarity, and care.</p>
+                <p className="text-sm font-semibold text-white">Clean work. Clear documentation. Reliable systems.</p>
+                <p className="mt-1 text-sm text-white/68">Customers remember the people who make technology feel dependable.</p>
               </div>
             </div>
           </section>
 
           <section data-analytics-section="careers-standards" data-reveal className="border-y border-white/10 bg-white/[0.035]">
-            <div className="mx-auto max-w-6xl px-4 py-14">
-              <div className="max-w-3xl">
-                <p className="text-xs font-semibold uppercase tracking-[0.22em] text-cyan-100/78">Who we are looking for</p>
-                <h2 className="mt-3 text-3xl font-semibold tracking-[0.01em] md:text-4xl">Not just resumes. Standards.</h2>
-              </div>
-              <div className="mt-8 grid gap-4 md:grid-cols-5">
-                {traits.map((trait, index) => {
-                  const Icon = trait.icon;
-                  return (
-                    <article
-                      key={trait.title}
+            <div className="mx-auto max-w-6xl px-4 py-16">
+              <div className="grid gap-8 md:grid-cols-[0.82fr_1.18fr] md:items-start">
+                <div>
+                  <p className="text-xs font-semibold uppercase tracking-[0.22em] text-cyan-100/78">Our Standards</p>
+                  <h2 className="mt-3 text-3xl font-semibold tracking-[0.01em] md:text-4xl">What we expect from everyone.</h2>
+                  <p className="mt-4 max-w-2xl leading-relaxed text-white/68">
+                    Not perks. Not slogans. The baseline for doing work customers trust.
+                  </p>
+                </div>
+                <div className="grid gap-3 sm:grid-cols-2">
+                  {standards.map((standard, index) => (
+                    <div
+                      key={standard}
                       data-reveal
-                      style={{ transitionDelay: `${index * 55}ms` }}
-                      className="rounded-3xl border border-white/10 bg-slate-950/36 p-5 transition duration-300 hover:-translate-y-0.5 hover:border-cyan-300/24 hover:bg-white/[0.055]"
+                      style={{ transitionDelay: `${index * 45}ms` }}
+                      className="flex items-center gap-3 rounded-2xl border border-white/10 bg-slate-950/36 px-4 py-4 text-sm font-semibold text-white/78 transition duration-300 hover:-translate-y-0.5 hover:border-cyan-300/24 hover:bg-white/[0.055]"
                     >
-                      <Icon className="h-6 w-6 text-cyan-200" aria-hidden="true" />
-                      <h3 className="mt-4 text-lg font-semibold">{trait.title}</h3>
-                      <p className="mt-2 text-sm leading-relaxed text-white/62">{trait.text}</p>
-                    </article>
-                  );
-                })}
+                      <CheckCircle2 className="h-5 w-5 shrink-0 text-cyan-200" aria-hidden="true" />
+                      {standard}
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
           </section>
@@ -154,7 +156,7 @@ export default function CareersPage() {
           <section id="opportunities" data-analytics-section="careers-paths" data-reveal className="mx-auto max-w-6xl scroll-mt-28 px-4 py-16 md:scroll-mt-32">
             <div className="max-w-3xl">
               <p className="text-xs font-semibold uppercase tracking-[0.22em] text-cyan-100/78">Career paths</p>
-              <h2 className="mt-3 text-3xl font-semibold tracking-[0.01em] md:text-4xl">Choose the kind of impact you want to make.</h2>
+              <h2 className="mt-3 text-3xl font-semibold tracking-[0.01em] md:text-4xl">Three ways to earn customer trust.</h2>
             </div>
             <div className="mt-8 grid gap-5 lg:grid-cols-3">
               {paths.map((path, index) => {
@@ -191,10 +193,10 @@ export default function CareersPage() {
             <div className="mx-auto grid max-w-6xl gap-8 px-4 py-16 md:grid-cols-[0.92fr_1.08fr] md:items-center">
               <div>
                 <p className="text-xs font-semibold uppercase tracking-[0.22em] text-cyan-100/78">Why GlobalTech</p>
-                <h2 className="mt-3 text-3xl font-semibold tracking-[0.01em] md:text-4xl">A smaller team. Higher ownership.</h2>
+                <h2 className="mt-3 text-3xl font-semibold tracking-[0.01em] md:text-4xl">A smaller team. No hiding.</h2>
                 <p className="mt-4 leading-relaxed text-white/70">
-                  We are building a company where technical quality and human trust belong together. That takes people
-                  who care about the customer, the details, and the long-term relationship.
+                  The person who takes the job owns the outcome. That means solving the problem, communicating clearly,
+                  and leaving the customer with confidence.
                 </p>
               </div>
               <div className="grid gap-3 sm:grid-cols-2">
@@ -217,14 +219,14 @@ export default function CareersPage() {
               <p className="text-xs font-semibold uppercase tracking-[0.22em] text-cyan-100/78">Apply</p>
               <h2 className="mt-3 text-3xl font-semibold tracking-[0.01em] md:text-4xl">Apply to GlobalTech</h2>
               <p className="mt-4 leading-relaxed text-white/70">
-                Tell us about yourself, choose the path that fits you best, and upload your resume. We review every application personally.
+                Every application is reviewed by a real person. We don&apos;t hire based only on resumes.
+                We hire people we&apos;d trust in front of our customers.
               </p>
-              <div className="mt-6 rounded-3xl border border-emerald-300/20 bg-emerald-950/16 p-5 text-emerald-50/82">
+              <div className="mt-7 rounded-3xl border border-cyan-300/20 bg-cyan-950/16 p-6 text-white shadow-[0_24px_70px_rgba(0,0,0,0.24)]">
                 <ShieldCheck className="h-7 w-7 text-emerald-200" aria-hidden="true" />
-                <p className="mt-4 text-lg font-semibold">We hire for character first.</p>
-                <p className="mt-2 text-sm leading-relaxed text-emerald-50/72">
-                  Skills can be taught. Integrity cannot.
-                </p>
+                <p className="mt-5 text-4xl font-semibold leading-none tracking-[0.01em] md:text-5xl">Character &gt; Experience</p>
+                <p className="mt-5 text-xl font-semibold text-white/88">Skills can be taught.</p>
+                <p className="mt-1 text-xl font-semibold text-cyan-100">Integrity cannot.</p>
               </div>
             </div>
             <ProviderApplicationForm />

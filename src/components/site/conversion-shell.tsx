@@ -12,7 +12,7 @@ const navItems: NavItem[] = [
   { label: "Managed IT", href: "/msp" },
   { label: "Services", href: "/#services" },
   { label: "Why Us", href: "/#why-us" },
-  { label: "Providers", href: "/careers" },
+  { label: "Careers", href: "/careers" },
   { label: "Contact", href: "/#contact" },
 ];
 
@@ -114,7 +114,7 @@ export function SiteFooter() {
                 MSP
               </Link>
               <Link href="/careers" className="hover:text-white">
-                Providers
+                Careers
               </Link>
               <Link href="/privacy-policy" className="hover:text-white">
                 Privacy
