@@ -145,8 +145,9 @@ export async function POST(req: Request) {
   const company = clean(body.company, 140);
   const message = clean(body.message, 4000);
   const leadSource = clean(body.leadSource, 120);
+  const isProvider = type === "provider";
 
-  if (!name || !email || !message) {
+  if (!name || !email || (!message && !isProvider)) {
     return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
   }
   if (!isEmail(email)) {
@@ -162,16 +163,13 @@ export async function POST(req: Request) {
     | undefined;
 
   if (type === "provider") {
-    const requiredProviderFields = [
-      "cityState",
-      "availability",
-      "experienceLevel",
-      "areasExperience",
-      "transportation",
-      "tools",
-    ];
+    const positionApplyingFor = clean(formData?.get("positionApplyingFor"), 160);
+    const experience = clean(formData?.get("experience"), 2400);
+    const hasCareersFields = Boolean(positionApplyingFor && experience);
+    const requiredProviderFields = ["cityState", "availability", "experienceLevel", "areasExperience", "transportation", "tools"];
     const missingProviderField = requiredProviderFields.find((field) => !clean(formData?.get(field), 1200));
-    if (!phone || missingProviderField) {
+
+    if (!phone || (!hasCareersFields && missingProviderField)) {
       return NextResponse.json({ error: "Missing required provider application fields" }, { status: 400 });
     }
 
@@ -179,8 +177,8 @@ export async function POST(req: Request) {
     if (!(resume instanceof File) || resume.size === 0) {
       return NextResponse.json({ error: "Resume upload is required" }, { status: 400 });
     }
-    if (resume.size > 5 * 1024 * 1024) {
-      return NextResponse.json({ error: "Resume must be 5 MB or smaller" }, { status: 400 });
+    if (resume.size > 10 * 1024 * 1024) {
+      return NextResponse.json({ error: "Resume must be 10 MB or smaller" }, { status: 400 });
     }
     if (!isAllowedResume(resume)) {
       return NextResponse.json({ error: "Resume must be a PDF, DOC, or DOCX file" }, { status: 400 });
@@ -224,21 +222,28 @@ export async function POST(req: Request) {
     );
   }
 
+  const providerPosition = type === "provider" && formData ? clean(formData.get("positionApplyingFor"), 160) : "";
+
   const subject = `[GlobalTech] ${type.toUpperCase()} request — ${name}${
-    company ? ` (${company})` : ""
+    providerPosition ? ` — ${providerPosition}` : company ? ` (${company})` : ""
   }`;
 
   const providerDetails =
     type === "provider" && formData
       ? [
-          `City/State: ${clean(formData.get("cityState"), 160)}`,
-          `Availability: ${clean(formData.get("availability"), 160)}`,
-          `Experience level: ${clean(formData.get("experienceLevel"), 160)}`,
-          `Areas of experience: ${clean(formData.get("areasExperience"), 1200)}`,
-          `Transportation: ${clean(formData.get("transportation"), 240)}`,
-          `Tools/equipment: ${clean(formData.get("tools"), 800)}`,
-          `Certifications: ${clean(formData.get("certifications"), 800) || "None provided"}`,
+          clean(formData.get("firstName"), 80) ? `First name: ${clean(formData.get("firstName"), 80)}` : "",
+          clean(formData.get("lastName"), 80) ? `Last name: ${clean(formData.get("lastName"), 80)}` : "",
+          providerPosition ? `Position: ${providerPosition}` : "",
+          clean(formData.get("experience"), 2400) ? `Experience: ${clean(formData.get("experience"), 2400)}` : "",
+          clean(formData.get("cityState"), 160) ? `City/State: ${clean(formData.get("cityState"), 160)}` : "",
+          clean(formData.get("availability"), 160) ? `Availability: ${clean(formData.get("availability"), 160)}` : "",
+          clean(formData.get("experienceLevel"), 160) ? `Experience level: ${clean(formData.get("experienceLevel"), 160)}` : "",
+          clean(formData.get("areasExperience"), 1200) ? `Areas of experience: ${clean(formData.get("areasExperience"), 1200)}` : "",
+          clean(formData.get("transportation"), 240) ? `Transportation: ${clean(formData.get("transportation"), 240)}` : "",
+          clean(formData.get("tools"), 800) ? `Tools/equipment: ${clean(formData.get("tools"), 800)}` : "",
+          clean(formData.get("certifications"), 800) ? `Certifications: ${clean(formData.get("certifications"), 800)}` : "",
         ]
+          .filter(Boolean)
       : [];
 
   const text = [
@@ -251,7 +256,7 @@ export async function POST(req: Request) {
     ...providerDetails,
     `IP: ${ip}`,
     "",
-    "Message:",
+    message ? "Message:" : "",
     message,
   ]
     .filter(Boolean)
