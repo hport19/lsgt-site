@@ -109,19 +109,48 @@ export default function CareersPage() {
               </div>
             </div>
 
-            <div className="relative min-h-[380px] overflow-hidden rounded-3xl border border-white/10 bg-slate-950/45">
-              <Image
-                src="/media/external/network-rack.jpg"
-                alt="Professional network rack and business infrastructure work"
-                fill
-                priority
-                className="object-cover opacity-82"
-                sizes="(max-width: 768px) 100vw, 48vw"
-              />
-              <div className="absolute inset-0 bg-[linear-gradient(to_top,rgba(3,7,18,0.84),rgba(3,7,18,0.14))]" />
-              <div className="absolute bottom-4 left-4 right-4 rounded-2xl border border-white/12 bg-black/38 p-4 backdrop-blur">
-                <p className="text-sm font-semibold text-white">Clean work. Clear documentation. Reliable systems.</p>
-                <p className="mt-1 text-sm text-white/68">Customers remember the people who make technology feel dependable.</p>
+            <div className="relative min-h-[440px] overflow-hidden rounded-3xl border border-white/10 bg-slate-950/45 p-4 shadow-[0_30px_90px_rgba(0,0,0,0.45)] md:min-h-[520px]">
+              <div className="absolute inset-0 bg-[radial-gradient(circle_at_28%_18%,rgba(34,211,238,0.22),transparent_32%),radial-gradient(circle_at_84%_78%,rgba(20,184,166,0.14),transparent_38%)]" />
+              <div className="absolute inset-4">
+                <div className="absolute left-0 top-0 h-[72%] w-[74%] overflow-hidden rounded-3xl border border-white/12 bg-black/28 shadow-[0_24px_70px_rgba(0,0,0,0.5)]">
+                  <Image
+                    src="/projects/hodgetown/2.jpg"
+                    alt="GlobalTech field work at a stadium installation"
+                    fill
+                    priority
+                    className="object-cover"
+                    sizes="(max-width: 768px) 82vw, 36vw"
+                  />
+                  <div className="absolute inset-0 bg-[linear-gradient(to_top,rgba(3,7,18,0.72),rgba(3,7,18,0.02)_58%)]" />
+                </div>
+
+                <div className="absolute right-0 top-10 h-[42%] w-[42%] overflow-hidden rounded-2xl border border-white/12 bg-black/34 shadow-[0_18px_50px_rgba(0,0,0,0.45)]">
+                  <Image
+                    src="/projects/hodgetown/3.jpg"
+                    alt="Precision technology installation detail overlooking the field"
+                    fill
+                    className="object-cover"
+                    sizes="(max-width: 768px) 46vw, 20vw"
+                  />
+                  <div className="absolute inset-0 bg-[linear-gradient(to_top,rgba(3,7,18,0.5),transparent)]" />
+                </div>
+
+                <div className="absolute bottom-[18%] right-4 hidden w-[48%] rounded-2xl border border-cyan-300/20 bg-slate-950/78 p-4 shadow-[0_20px_60px_rgba(0,0,0,0.42)] backdrop-blur sm:block">
+                  <p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-100/72">Field ownership</p>
+                  <p className="mt-2 text-sm font-semibold leading-snug text-white">
+                    The work is visible. The standard follows your name.
+                  </p>
+                </div>
+
+                <div className="absolute bottom-0 left-[8%] right-[8%] rounded-3xl border border-white/12 bg-black/42 p-4 backdrop-blur-xl">
+                  <div className="grid gap-3 sm:grid-cols-3">
+                    {["Craft", "Documentation", "Customer trust"].map((item) => (
+                      <div key={item} className="rounded-2xl border border-white/10 bg-white/6 px-3 py-3 text-sm font-semibold text-white/78">
+                        {item}
+                      </div>
+                    ))}
+                  </div>
+                </div>
               </div>
             </div>
           </section>
@@ -156,7 +185,7 @@ export default function CareersPage() {
           <section id="opportunities" data-analytics-section="careers-paths" data-reveal className="mx-auto max-w-6xl scroll-mt-28 px-4 py-16 md:scroll-mt-32">
             <div className="max-w-3xl">
               <p className="text-xs font-semibold uppercase tracking-[0.22em] text-cyan-100/78">Career paths</p>
-              <h2 className="mt-3 text-3xl font-semibold tracking-[0.01em] md:text-4xl">Three ways to earn customer trust.</h2>
+              <h2 className="mt-3 text-3xl font-semibold tracking-[0.01em] md:text-4xl">Choose how you want to make an impact.</h2>
             </div>
             <div className="mt-8 grid gap-5 lg:grid-cols-3">
               {paths.map((path, index) => {
