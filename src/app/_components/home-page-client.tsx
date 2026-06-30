@@ -1035,6 +1035,7 @@ export default function Page() {
               <NavBtn onClick={() => scrollToId("solutions")}>Solutions</NavBtn>
               <NavBtn onClick={() => scrollToId("why")}>Why GlobalTech</NavBtn>
               <NavBtn onClick={() => scrollToId("projects")}>Projects</NavBtn>
+              <NavBtn onClick={() => window.location.assign("/careers")}>Careers</NavBtn>
               <NavBtn onClick={() => scrollToId("contact")}>Contact</NavBtn>
             </nav>
 
@@ -1119,6 +1120,16 @@ export default function Page() {
                 className="rounded-xl border border-white/10 px-4 py-2 text-left hover:bg-white/5"
               >
                 Projects
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  setMobileNavOpen(false);
+                  window.location.assign("/careers");
+                }}
+                className="rounded-xl border border-white/10 px-4 py-2 text-left hover:bg-white/5"
+              >
+                Careers
               </button>
               <button
                 type="button"
@@ -2027,6 +2038,9 @@ export default function Page() {
                 <button className="hover:text-white" type="button" onClick={() => scrollToId("projects")}>
                   Projects
                 </button>
+                <a href="/careers" className="hover:text-white" aria-label="Open Careers">
+                  Careers
+                </a>
                 <button className="hover:text-white" type="button" onClick={() => scrollToId("process")}>
                   How We Work
                 </button>
